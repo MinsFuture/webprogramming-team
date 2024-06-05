@@ -35,14 +35,30 @@
   <div v-if="this.$route.path === '/'">
     <div class="center-content">
       <h1>열심히 살다 죽자</h1>
-      <form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
+
+      <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+          <div class="dropdown" style="margin-right: 15px">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+              카테고리
+            </button>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">Action</a></li>
+              <li><a class="dropdown-item" href="#">Another action</a></li>
+              <li><a class="dropdown-item" href="#">Something else here</a></li>
+            </ul>
+          </div>
+
+          <form class="d-flex" role="search" style="margin-bottom: 15px">
+            <input class="form-control me-2" type="search" placeholder="검색어를 입력하세요" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit" style="width: 80px">검색</button>
+          </form>
+        </div>
+      </nav>
     </div>
     <HomeBoardComp></HomeBoardComp>
   </div>
-
   <router-view></router-view>
 </template>
 
@@ -63,16 +79,16 @@ export default {
     routingMyBoards() {
       this.$router.push('/boards/me');
     },
-    routingMyAttendPrograms(){
+    routingMyAttendPrograms() {
       this.$router.push('/programs/me')
     },
-    routingMyRanksComp(){
+    routingMyRanksComp() {
       this.$router.push('/ranks/me')
     },
-    routingCreateBoardComp(){
+    routingCreateBoardComp() {
       this.$router.push('/create/board')
     },
-    logout(){
+    logout() {
       alert('로그아웃 되었습니다');
       this.isLogin = false;
       this.$router.push('/');
