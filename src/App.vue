@@ -15,7 +15,7 @@
 
         <div class="icon-group ms-auto">
           <i class="bi bi-chat-fill text-white"></i>
-          <div v-if="isLogin" class="dropdown-center">
+          <div v-if="this.$store.state.isLogin" class="dropdown-center">
             <i class="bi bi-person-circle text-white dropdown-toggle"
                data-bs-toggle="dropdown" aria-expanded="false"></i>
             <ul class="dropdown-menu">
@@ -26,7 +26,8 @@
             </ul>
           </div>
         </div>
-        <button v-if="!isLogin" @click="this.isLogin = true" type="button" class="btn btn-light">로그인</button>
+        <button v-if="!this.$store.state.isLogin" @click="routingLoginComp" type="button" class="btn btn-light">로그인</button>
+        <button v-if="!this.$store.state.isLogin" @click="routingCreateMemberComp" type="button" class="btn btn-light">회원가입</button>
         <button v-else type="button" @click="routingCreateBoardComp" class="btn btn-light">글쓰기</button>
       </div>
     </div>
@@ -44,9 +45,9 @@
               카테고리
             </button>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Action</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
+              <li><a class="dropdown-item">교육</a></li>
+              <li><a class="dropdown-item">봉사</a></li>
+              <li><a class="dropdown-item">운동</a></li>
             </ul>
           </div>
 
@@ -72,7 +73,6 @@ export default {
   },
   data() {
     return {
-      isLogin: true,
     }
   },
   methods: {
@@ -88,9 +88,15 @@ export default {
     routingCreateBoardComp() {
       this.$router.push('/create/board')
     },
+    routingCreateMemberComp(){
+      this.$router.push('/create/member')
+    },
+    routingLoginComp(){
+      this.$router.push('/login')
+    },
     logout() {
       alert('로그아웃 되었습니다');
-      this.isLogin = false;
+      this.$store.state.isLogin = false;
       this.$router.push('/');
     }
   }

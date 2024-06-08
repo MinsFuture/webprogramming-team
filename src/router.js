@@ -1,8 +1,10 @@
 import { createWebHistory, createRouter } from "vue-router";
-import MyBoardsComp from "@/components/MyBoardsComp.vue";
-import MyAttendProgramComp from "@/components/MyAttendProgramComp.vue";
-import MyRanksComp from "@/components/MyRanksComp.vue";
+import MyBoardsComp from "@/components/profile/MyBoardsComp.vue";
+import MyAttendProgramComp from "@/components/profile/MyAttendProgramComp.vue";
+import MyRanksComp from "@/components/profile/MyRanksComp.vue";
 import CreatingBoardComp from "@/components/CreatingBoardComp.vue";
+import CreateMemberComp from "@/components/CreateMemberComp.vue";
+import LoginFormComp from "@/components/LoginFormComp.vue";
 
 const routes = [
     {
@@ -20,8 +22,15 @@ const routes = [
     {
         path: "/create/board",
         component: CreatingBoardComp
+    },
+    {
+        path: "/create/member",
+        component: CreateMemberComp
+    },
+    {
+        path: "/login",
+        component: LoginFormComp
     }
-
 ];
 
 const router = createRouter({

@@ -7,15 +7,21 @@ export default {
         title: '',
         content: '',
         category: '',
-        maxParticipants: 0
+        maxParticipants: 0,
+        recruitmentPeriodStart : '',
+        recruitmentPeriodEnd : '',
+        startDate: ''
       },
       isFormValid: false,
+      recruitmentPeriodValid: true
     }
   },
   methods: {
-    submitForm() {
+    submitForm(event) {
+      event.preventDefault(); // 기본 제출 동작을 막습니다.
       // 양식 제출 전에 유효성 검사 실행
       this.checkFormValidity();
+      console.log(this.createdBoardRequestDto)
 
       // 유효성 검사를 통과한 경우에만 제출
       if (this.isFormValid) {
@@ -29,11 +35,18 @@ export default {
     },
 
     checkFormValidity() {
+      // 모집 기간의 유효성 확인
+      this.recruitmentPeriodValid = this.createdBoardRequestDto.recruitmentPeriodStart !== '' &&
+          this.createdBoardRequestDto.recruitmentPeriodEnd !== '' &&
+          this.createdBoardRequestDto.recruitmentPeriodStart <= this.createdBoardRequestDto.recruitmentPeriodEnd;
+
       // 모든 필드가 유효한지 확인하여 isFormValid 업데이트
       this.isFormValid = this.createdBoardRequestDto.title.trim().length > 0 &&
           this.createdBoardRequestDto.content.trim().length > 0 &&
           this.createdBoardRequestDto.category !== '' &&
           this.createdBoardRequestDto.maxParticipants > 0 &&
+          this.recruitmentPeriodValid &&
+          this.createdBoardRequestDto.startDate !== '' &&
           this.$refs.fileInput.files.length > 0;
     }
   }
@@ -43,10 +56,10 @@ export default {
 <template>
   <div class="container">
     <h1 class="center-content">프로그램 개설</h1>
-    <form class="was-validated">
+    <form class="was-validated" @submit="submitForm">
       <div class="mb-3">
-        <label for="validationTextarea" class="form-label">제목</label>
-        <textarea v-model="createdBoardRequestDto.title" class="form-control" id="validationTextarea"
+        <label for="title" class="form-label">제목</label>
+        <textarea v-model="createdBoardRequestDto.title" class="form-control" id="title"
                   placeholder="제목을 입력하세요" required style="height: 15px"></textarea>
         <div class="invalid-feedback">
           제목을 입력하세요
@@ -54,8 +67,8 @@ export default {
       </div>
 
       <div class="mb-3">
-        <label for="validationTextarea" class="form-label">내용</label>
-        <textarea v-model="createdBoardRequestDto.content" class="form-control" id="validationTextarea"
+        <label for="content" class="form-label">내용</label>
+        <textarea v-model="createdBoardRequestDto.content" class="form-control" id="content"
                   placeholder="내용을 입력하세요" required style="height: 200px"></textarea>
         <div class="invalid-feedback">
           내용을 입력하세요
@@ -82,17 +95,48 @@ export default {
       </div>
 
       <div class="mb-3">
+        <label for="recruitmentPeriod" class="form-label">모집 기간</label>
+        <div class="d-flex align-items-center">
+          <input type="date" v-model="createdBoardRequestDto.recruitmentPeriodStart" class="form-control" id="recruitmentStartDate"
+                 required>
+          <span class="mx-2">~</span>
+          <input type="date" v-model="createdBoardRequestDto.recruitmentPeriodEnd" class="form-control" id="recruitmentEndDate"
+                 required>
+        </div>
+        <div class="invalid-feedback" v-if="!recruitmentPeriodValid">모집 종료일은 모집 시작일보다 앞에 있을 수 없습니다.</div>
+        <div class="invalid-feedback" v-else>모집 기간을 선택하세요</div>
+      </div>
+
+      <div class="mb-3">
+        <label for="startDate" class="form-label">프로그램 시작 날짜</label>
+        <input type="date" v-model="createdBoardRequestDto.startDate" class="form-control" id="startDate" required>
+        <div class="invalid-feedback">
+          프로그램 시작 날짜를 선택하세요
+        </div>
+      </div>
+
+      <div class="mb-3">
         <input type="file" class="form-control" aria-label="file example" multiple required ref="fileInput">
         <div class="invalid-feedback">사진을 최소 하나이상 첨부해주세요</div>
       </div>
 
       <div class="mb-3">
-        <button @click="submitForm" class="btn btn-primary" type="submit">신청하기</button>
+        <button class="btn btn-primary" type="submit">신청하기</button>
       </div>
     </form>
   </div>
 </template>
 
 <style scoped>
-
+/* 여기에 필요한 스타일을 추가하세요 */
+.d-flex {
+  display: flex;
+}
+.align-items-center {
+  align-items: center;
+}
+.mx-2 {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+}
 </style>
