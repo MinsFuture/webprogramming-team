@@ -5,6 +5,7 @@ import MyRanksComp from "@/components/profile/MyRanksComp.vue";
 import CreatingBoardComp from "@/components/CreatingBoardComp.vue";
 import CreateMemberComp from "@/components/CreateMemberComp.vue";
 import LoginFormComp from "@/components/LoginFormComp.vue";
+import DetailBoardComp from "@/components/DetailBoardComp.vue";
 
 const routes = [
     {
@@ -30,6 +31,10 @@ const routes = [
     {
         path: "/login",
         component: LoginFormComp
+    },
+    {
+        path: "/board/:id",
+        component: DetailBoardComp
     }
 ];
 

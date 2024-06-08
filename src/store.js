@@ -5,7 +5,7 @@ const store = createStore({
     state(){
         return {
             accessToken : '',
-            isLogin : false
+            isLogin : true
         }
     },
     mutations : {
