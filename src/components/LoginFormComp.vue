@@ -48,7 +48,7 @@ export default {
       }
     },
     login() {
-      axios.post('http://localhost:8080/login', this.form)
+      axios.post('http://localhost:8080/login', JSON.stringify(this.form))
           .then(() => {
             console.log(alert('로그인 성공!'));
           })

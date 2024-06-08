@@ -94,7 +94,7 @@ export default {
         // 폼이 유효한 경우 처리 로직 (예: API 호출)
         this.getCoordinate();
         console.log(this.form);
-        axios.post('http://localhost:8080/member/signup', this.form)
+        axios.post('http://localhost:8080/member/signup', JSON.stringify(this.form))
             .then(() => {
               alert('회원 가입 성공!')
               this.$store.state.isLogin = true;
