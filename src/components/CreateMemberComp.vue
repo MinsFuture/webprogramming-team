@@ -10,8 +10,8 @@
 
       <div class="mb-3">
         <label for="password" class="form-label">비밀번호:</label>
-        <input type="password" id="password" v-model="form.password" class="form-control" required/>
-        <div class="invalid-feedback">비밀번호를 입력해주세요.</div>
+        <input type="password" id="password" v-model="form.password" class="form-control" pattern="[^\u3131-\uD79D]*" required/>
+        <div class="invalid-feedback">비밀번호는 영문, 숫자만 입력해주세요.</div>
       </div>
 
       <div class="mb-3">
@@ -94,10 +94,13 @@ export default {
         // 폼이 유효한 경우 처리 로직 (예: API 호출)
         this.getCoordinate();
         console.log(this.form);
-        axios.post('http://localhost:8080/member/signup', JSON.stringify(this.form))
+        axios.post('http://localhost:8080/member/signup', JSON.stringify(this.form), {
+          headers : {
+            'Content-Type': 'application/json'
+          }
+        })
             .then(() => {
               alert('회원 가입 성공!')
-              this.$store.state.isLogin = true;
               this.$router.push('/')
             })
             .catch((error) => {

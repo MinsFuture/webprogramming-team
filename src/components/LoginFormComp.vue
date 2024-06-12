@@ -48,9 +48,17 @@ export default {
       }
     },
     login() {
-      axios.post('http://localhost:8080/login', JSON.stringify(this.form))
-          .then(() => {
+      axios.post('http://localhost:8080/login', JSON.stringify(this.form), {
+        headers : {
+          'Content-Type': 'application/json'
+        }
+      })
+          .then((response) => {
             console.log(alert('로그인 성공!'));
+
+            for (let [key, value] of response.headers) {
+              console.log(`${key} = ${value}`);
+            }
           })
           .catch((error) => {
             console.log('로그인 에러 ' + error);
