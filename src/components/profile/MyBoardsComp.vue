@@ -1,19 +1,45 @@
 <script>
+import axios from "axios";
+
 export default {
-  name: "MyBoardsComp"
+  name: "MyBoardsComp",
+  data() {
+    return {
+      memberProgramRecruitmentResponse : [
+      ]
+    }
+  },
+  methods : {
+    routingProgramDetail(id){
+      this.$router.push(`/board/${id}`)
+    }
+  },
+  created() {
+    axios.get(`${this.$store.state.host}/program/recruitment/programs`, {
+      headers : {
+        "Accesstoken" : this.$store.state.accessToken,
+      }
+    })
+        .then((response) => {
+          this.memberProgramRecruitmentResponse = response.data.response;
+        })
+        .catch((error) => {
+          console.log("내 프로그램 불러오기 오류 : " + error);
+        })
+  }
 }
 </script>
 
 <template>
   <div class="container">
-    <h1 class="center-content">내가 쓴 글</h1>
+    <h1 class="center-content">내가 개최한 프로그램들</h1>
     <div class="row">
-      <ul class="list-group list-group-flush">
-        <li class="list-group-item">웹 개발 기초 프로그램 봉사</li>
-        <li class="list-group-item">자바 프로그래밍 멘토링 활동</li>
-        <li class="list-group-item">데이터 분석 기초 과정</li>
-        <li class="list-group-item">앱 개발 실전 프로젝트 팀</li>
-        <li class="list-group-item">인공지능 기초 강의 봉사</li>
+      <ul class="list-group list-group-flush" v-for="program in memberProgramRecruitmentResponse" :key="program.programId">
+        <li @click="routingProgramDetail(program.programId)" class="list-group-item">
+          <div>{{ program.title }}</div>
+          <div>카테고리: {{ program.category }}</div>
+          <div>글 쓴 날짜: {{ program.programDate }}</div>
+        </li>
       </ul>
     </div>
   </div>
