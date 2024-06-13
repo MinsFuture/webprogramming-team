@@ -54,13 +54,12 @@ export default {
         }
       })
           .then((response) => {
-            console.log(alert('로그인 성공!'));
-
-            for (let [key, value] of response.headers) {
-              console.log(`${key} = ${value}`);
-            }
+            alert('로그인 성공!')
+            this.$router.push("/")
+            this.$store.commit('loginSuccessInit', {email : this.form.email, accessToken :  response.headers.get('accessToken')})
           })
           .catch((error) => {
+            alert('로그인 실패! 비밀번호를 확인해주세요')
             console.log('로그인 에러 ' + error);
           })
     }
