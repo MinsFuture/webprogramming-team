@@ -42,12 +42,12 @@
           <div class="dropdown" style="margin-right: 15px">
             <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
                     aria-expanded="false">
-              카테고리
+              {{ selectedCategory }}
             </button>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item">교육</a></li>
-              <li><a class="dropdown-item">봉사</a></li>
-              <li><a class="dropdown-item">운동</a></li>
+              <li><a class="dropdown-item" @click="selectCategory('교육')">교육</a></li>
+              <li><a class="dropdown-item" @click="selectCategory('봉사')">봉사</a></li>
+              <li><a class="dropdown-item" @click="selectCategory('운동')">운동</a></li>
             </ul>
           </div>
 
@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import HomeBoardComp from "@/components/HomeBoardComp.vue";
+import HomeBoardComp from "@/components/program/HomeBoardComp.vue";
 
 export default {
   name: 'App',
@@ -73,6 +73,7 @@ export default {
   },
   data() {
     return {
+      selectedCategory : '카테고리'
     }
   },
   methods: {
@@ -94,9 +95,14 @@ export default {
     routingLoginComp(){
       this.$router.push('/login')
     },
+    selectCategory(category){
+      this.selectedCategory = category;
+    },
     logout() {
       alert('로그아웃 되었습니다');
+      this.$store.state.accessToken = '';
       this.$store.state.isLogin = false;
+      this.$store.state.loginedEmail = '';
       this.$router.push('/');
     }
   }
@@ -106,6 +112,7 @@ export default {
 <style>
 @import "assets/bootstrap.min.css";
 @import "bootstrap-icons/font/bootstrap-icons.css";
+@import "assets/style.css";
 
 .navbar {
   margin-bottom: 1rem; /* navbar 아래에 1rem 간격 추가 */

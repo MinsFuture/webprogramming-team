@@ -2,10 +2,11 @@ import { createWebHistory, createRouter } from "vue-router";
 import MyBoardsComp from "@/components/profile/MyBoardsComp.vue";
 import MyAttendProgramComp from "@/components/profile/MyAttendProgramComp.vue";
 import MyRanksComp from "@/components/profile/MyRanksComp.vue";
-import CreatingBoardComp from "@/components/CreatingBoardComp.vue";
+import CreatingBoardComp from "@/components/program/CreatingBoardComp.vue";
 import CreateMemberComp from "@/components/CreateMemberComp.vue";
 import LoginFormComp from "@/components/LoginFormComp.vue";
-import DetailBoardComp from "@/components/DetailBoardComp.vue";
+import DetailBoardComp from "@/components/program/DetailBoardComp.vue";
+import UpdateBoardComp from "@/components/program/UpdateBoardComp.vue";
 
 const routes = [
     {
@@ -35,6 +36,10 @@ const routes = [
     {
         path: "/board/:id",
         component: DetailBoardComp
+    },
+    {
+        path: "/board/update/:id",
+        component: UpdateBoardComp
     }
 ];
 
