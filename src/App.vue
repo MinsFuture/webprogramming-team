@@ -45,10 +45,13 @@
               {{ selectedCategory }}
             </button>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" @click="selectCategory('교육')">교육</a></li>
-              <li><a class="dropdown-item" @click="selectCategory('봉사')">봉사</a></li>
-              <li><a class="dropdown-item" @click="selectCategory('운동')">운동</a></li>
+              <li><a class="dropdown-item" @click="selectCategory('SPORTS')">SPORTS</a></li>
+              <li><a class="dropdown-item" @click="selectCategory('COMPUTER')">COMPUTER</a></li>
+              <li><a class="dropdown-item" @click="selectCategory('ART')">ART</a></li>
             </ul>
+            <button class="btn btn-secondary" @click="recentedSort"> 최신 순 정렬 </button>
+            <button class="btn btn-secondary" @click="nowOpenLists"> 모집 중 </button>
+
           </div>
 
           <form class="d-flex" role="search" style="margin-bottom: 15px">
@@ -58,13 +61,14 @@
         </div>
       </nav>
     </div>
-    <HomeBoardComp></HomeBoardComp>
+    <HomeBoardComp :programAllReadResponse="programAllReadResponse"></HomeBoardComp>
   </div>
   <router-view></router-view>
 </template>
 
 <script>
 import HomeBoardComp from "@/components/program/HomeBoardComp.vue";
+import axios from "axios";
 
 export default {
   name: 'App',
@@ -73,7 +77,8 @@ export default {
   },
   data() {
     return {
-      selectedCategory : '카테고리'
+      selectedCategory : '카테고리',
+      programAllReadResponse : []
     }
   },
   methods: {
@@ -97,7 +102,35 @@ export default {
     },
     selectCategory(category){
       this.selectedCategory = category;
+      axios.get(`${this.$store.state.host}/program/category/${category}`)
+          .then((response) => {
+            this.programAllReadResponse =  response.data.response;
+          })
+          .catch((error) => {
+            console.log('홈 화면 불러오기 오류 : ' + error);
+          })
     },
+
+    recentedSort(){
+      axios.get(`${this.$store.state.host}/program/category/date`)
+          .then((response) => {
+            this.programAllReadResponse =  response.data.response;
+          })
+          .catch((error) => {
+            console.log('홈 화면 불러오기 오류 : ' + error);
+          })
+    },
+
+    nowOpenLists(){
+      axios.get(`${this.$store.state.host}/program/category/open`)
+          .then((response) => {
+            this.programAllReadResponse =  response.data.response;
+          })
+          .catch((error) => {
+            console.log('홈 화면 불러오기 오류 : ' + error);
+          })
+    },
+
     logout() {
       alert('로그아웃 되었습니다');
       this.$store.state.accessToken = '';
@@ -105,6 +138,15 @@ export default {
       this.$store.state.loginedEmail = '';
       this.$router.push('/');
     }
+  },
+  mounted() {
+    axios.get(`${this.$store.state.host}/program/view`)
+        .then((response) => {
+          this.programAllReadResponse =  response.data.response;
+        })
+        .catch((error) => {
+          console.log('홈 화면 불러오기 오류 : ' + error);
+        })
   }
 }
 </script>

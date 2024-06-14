@@ -72,7 +72,7 @@
             <h3 class="fw-bolder">프로그램 시작 날짜</h3>
             <p class="fs-5">{{ programIdReadResponse.programDate }}</p>
             <h3 class="fw-bolder">현재 모집인원</h3>
-            <p class="fs-5">{{ nowProgramRecruit }}/{{ programIdReadResponse.maximum }}</p>
+            <p class="fs-5">{{ programIdReadResponse.recruitment }}/{{ programIdReadResponse.maximum }}</p>
             <button @click="recruitmentProgram" v-if="!checkIsMyProgram" type="button" class="btn btn-primary">신청하기</button>
             <button type="button" class="btn btn-primary">채팅하기</button>
           </div>
@@ -106,6 +106,7 @@ export default {
         recruitmentEndDate: '',
         programDate: '',
         open: '',
+        recruitment : 0,
       },
       nowProgramRecruit : 0,
     };
@@ -210,8 +211,6 @@ export default {
     axios.get(`http://localhost:8080/program/view/${id}`)
         .then((response) => {
           this.programIdReadResponse = response.data.response;
-          console.log(this.programIdReadResponse);
-          console.log(this.programIdReadResponse.title)
         })
         .catch((error) => {
           console.log('Get 에러 ' + error);

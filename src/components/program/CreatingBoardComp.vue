@@ -105,9 +105,9 @@ export default {
       <div class="mb-3">
         <select v-model="ProgramSaveRequest.category" class="form-select" required aria-label="select example">
           <option value="">카테고리를 선택하세요</option>
-          <option value="0">교육</option>
-          <option value="1">봉사</option>
-          <option value="2">운동</option>
+          <option value="0">SPORTS</option>
+          <option value="1">COMPUTER</option>
+          <option value="2">ART</option>
         </select>
         <div class="invalid-feedback">카테고리를 선택해주세요</div>
       </div>
@@ -124,11 +124,11 @@ export default {
       <div class="mb-3">
         <label for="recruitmentPeriod" class="form-label">모집 기간</label>
         <div class="d-flex align-items-center">
-          <input type="date" v-model="ProgramSaveRequest.recruitmentStartDate" class="form-control"
+          <input type="datetime-local" v-model="ProgramSaveRequest.recruitmentStartDate" class="form-control"
                  id="recruitmentStartDate"
                  required>
           <span class="mx-2">~</span>
-          <input type="date" v-model="ProgramSaveRequest.recruitmentEndDate" class="form-control"
+          <input type="datetime-local" v-model="ProgramSaveRequest.recruitmentEndDate" class="form-control"
                  id="recruitmentEndDate"
                  required>
         </div>
@@ -136,7 +136,7 @@ export default {
 
       <div class="mb-3">
         <label for="startDate" class="form-label">프로그램 시작 날짜</label>
-        <input type="date" v-model="ProgramSaveRequest.programDate" class="form-control" id="startDate" required>
+        <input type="datetime-local" v-model="ProgramSaveRequest.programDate" class="form-control" id="startDate" required>
         <div class="invalid-feedback">
           프로그램 시작 날짜를 선택하세요
         </div>

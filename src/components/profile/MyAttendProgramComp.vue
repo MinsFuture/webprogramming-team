@@ -10,23 +10,42 @@ export default {
     }
   },
   methods : {
-    routingProgramDetail(id){
+    routingProgramDetail(id) {
       this.$router.push(`/board/${id}`)
-    }
+    },
+    cancel(id) {
+      if (confirm('취소하시겠습니까?')) {
+        axios.post(`${this.$store.state.host}/program/recruitment/cancel/${id}`, null, {
+          headers: {
+            "Accesstoken": this.$store.state.accessToken,
+          }
+        })
+            .then(() => {
+              alert('취소 성공!');
+              this.$router.push('/programs/me')
+            })
+            .catch((error) => {
+              console.log('취소 에러 : ' + error);
+            });
+      } else {
+        alert('취소를 중단하셨습니다.');
+      }
+    },
   },
   created() {
     axios.get(`${this.$store.state.host}/program/recruitment/programs`, {
-      headers : {
-        "Accesstoken" : this.$store.state.accessToken,
+      headers: {
+        "Accesstoken": this.$store.state.accessToken,
       }
     })
         .then((response) => {
           this.memberProgramRecruitmentResponse = response.data.response;
+          console.log(this.memberProgramRecruitmentResponse)
         })
         .catch((error) => {
           console.log("내 프로그램 불러오기 오류 : " + error);
         })
-  }
+  },
 }
 </script>
 
@@ -39,6 +58,7 @@ export default {
           <div>{{ program.title }}</div>
           <div>카테고리: {{ program.category }}</div>
           <div>글 쓴 날짜: {{ program.programDate }}</div>
+          <button @click="cancel(program.programId)" class="btn btn-danger">취소</button>
         </li>
       </ul>
     </div>
