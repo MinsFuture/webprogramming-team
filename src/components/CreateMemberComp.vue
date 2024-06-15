@@ -1,28 +1,60 @@
 <template>
   <div class="create-member">
     <h2>회원가입</h2>
-    <form @submit.prevent="submitForm" ref="form" novalidate class="was-validated">
+    <form
+      @submit.prevent="submitForm"
+      ref="form"
+      novalidate
+      class="was-validated"
+    >
       <div class="mb-3">
         <label for="email" class="form-label">이메일:</label>
-        <input type="email" id="email" v-model="form.email" class="form-control" required/>
+        <input
+          type="email"
+          id="email"
+          v-model="form.email"
+          class="form-control"
+          required
+        />
         <div class="invalid-feedback">이메일을 입력해주세요.</div>
       </div>
 
       <div class="mb-3">
         <label for="password" class="form-label">비밀번호:</label>
-        <input type="password" id="password" v-model="form.password" class="form-control" pattern="[^\u3131-\uD79D]*" required/>
-        <div class="invalid-feedback">비밀번호는 영문, 숫자만 입력해주세요.</div>
+        <input
+          type="password"
+          id="password"
+          v-model="form.password"
+          class="form-control"
+          pattern="[^\u3131-\uD79D]*"
+          required
+        />
+        <div class="invalid-feedback">
+          비밀번호는 영문, 숫자만 입력해주세요.
+        </div>
       </div>
 
       <div class="mb-3">
         <label for="nickname" class="form-label">닉네임:</label>
-        <input type="text" id="nickname" v-model="form.memberName" class="form-control" required/>
+        <input
+          type="text"
+          id="nickname"
+          v-model="form.memberName"
+          class="form-control"
+          required
+        />
         <div class="invalid-feedback">닉네임을 입력해주세요.</div>
       </div>
 
       <div class="mb-3">
         <label for="birthdate" class="form-label">생년월일:</label>
-        <input type="date" id="birthdate" v-model="form.birth" class="form-control" required/>
+        <input
+          type="date"
+          id="birthdate"
+          v-model="form.birth"
+          class="form-control"
+          required
+        />
         <div class="invalid-feedback">생년월일을 입력해주세요.</div>
       </div>
 
@@ -39,14 +71,27 @@
 
       <div class="mb-3">
         <label for="age" class="form-label">나이:</label>
-        <input type="number" id="age" v-model="form.age" class="form-control" required/>
+        <input
+          type="number"
+          id="age"
+          v-model="form.age"
+          class="form-control"
+          required
+        />
         <div class="invalid-feedback">나이를 입력해주세요.</div>
       </div>
 
       <div class="mb-3">
         <label for="location" class="form-label">위치:</label>
-        <input type="text" id="location" v-model="location" class="form-control" @click="openPostcodePopup" readonly
-               required/>
+        <input
+          type="text"
+          id="location"
+          v-model="location"
+          class="form-control"
+          @click="openPostcodePopup"
+          readonly
+          required
+        />
         <div class="invalid-feedback">위치를 입력해주세요.</div>
       </div>
 
@@ -54,7 +99,7 @@
         <button class="btn btn-primary" type="submit">가입하기</button>
       </div>
     </form>
-    <div id="daumPostcode" style="display:none;"></div>
+    <div id="daumPostcode" style="display: none"></div>
   </div>
 </template>
 
@@ -81,8 +126,9 @@ export default {
   },
   mounted() {
     // 다음 주소 검색 API 스크립트 동적 로드
-    const script = document.createElement('script');
-    script.src = "//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js";
+    const script = document.createElement("script");
+    script.src =
+      "//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js";
     script.onload = () => {
       this.daumPostcodeLoaded = true;
     };
@@ -94,22 +140,26 @@ export default {
         // 폼이 유효한 경우 처리 로직 (예: API 호출)
         this.getCoordinate();
         console.log(this.form);
-        axios.post('http://localhost:8080/member/signup', JSON.stringify(this.form), {
-          headers : {
-            'Content-Type': 'application/json'
-          }
-        })
-            .then(() => {
-              alert('회원 가입 성공!')
-              this.$router.push('/')
-            })
-            .catch((error) => {
-              console.log('회원 가입 실패' + error);
-            })
-
+        axios
+          .post(
+            "http://localhost:8080/member/signup",
+            JSON.stringify(this.form),
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          )
+          .then(() => {
+            alert("회원 가입 성공!");
+            this.$router.push("/");
+          })
+          .catch((error) => {
+            console.log("회원 가입 실패" + error);
+          });
       } else {
         // 유효하지 않은 경우 폼 검증 트리거
-        this.$refs.form.classList.add('was-validated');
+        this.$refs.form.classList.add("was-validated");
       }
     },
     openPostcodePopup() {
@@ -120,35 +170,38 @@ export default {
             let roadAddr = data.roadAddress;
             // 변환된 주소를 폼에 적용
             this.location = roadAddr;
-          }
+          },
         }).open();
       } else {
-        alert('주소 검색 API 로드에 실패했습니다.');
+        alert("주소 검색 API 로드에 실패했습니다.");
       }
     },
     getCoordinate() {
       const headers = {
-        Authorization: `KakaoAK 89812f89e48298b9f8581fa37b3270e7`
+        Authorization: `KakaoAK 89812f89e48298b9f8581fa37b3270e7`,
       };
 
       console.log(this.location);
 
-      axios.get(`https://dapi.kakao.com/v2/local/search/address.json?query=${this.location}`, {headers})
-          .then(response => {
-            if (response.data.documents.length > 0) {
-              const result = response.data.documents[0];
-              this.form.longitude = result.x;
-              this.form.latitude = result.y;
-            } else {
-              alert('좌표를 찾을 수 없습니다.');
-            }
-          })
-          .catch(error => {
-            console.error('좌표를 가져오는 중 오류가 발생했습니다:', error);
-          });
-    }
-
-  }
+      axios
+        .get(
+          `https://dapi.kakao.com/v2/local/search/address.json?query=${this.location}`,
+          { headers }
+        )
+        .then((response) => {
+          if (response.data.documents.length > 0) {
+            const result = response.data.documents[0];
+            this.form.longitude = result.x;
+            this.form.latitude = result.y;
+          } else {
+            alert("좌표를 찾을 수 없습니다.");
+          }
+        })
+        .catch((error) => {
+          console.error("좌표를 가져오는 중 오류가 발생했습니다:", error);
+        });
+    },
+  },
 };
 </script>
 

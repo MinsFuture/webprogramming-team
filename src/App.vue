@@ -2,8 +2,15 @@
   <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">기부천사</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-              aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -16,19 +23,51 @@
         <div class="icon-group ms-auto">
           <i class="bi bi-chat-fill text-white"></i>
           <div v-if="this.$store.state.isLogin" class="dropdown-center">
-            <i class="bi bi-person-circle text-white dropdown-toggle"
-               data-bs-toggle="dropdown" aria-expanded="false"></i>
+            <i
+              class="bi bi-person-circle text-white dropdown-toggle"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            ></i>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" @click="routingMyBoards">내가 쓴 글</a></li>
-              <li><a class="dropdown-item" @click="routingMyAttendPrograms">내가 신청한 프로그램</a></li>
-              <li><a class="dropdown-item" @click="routingMyRanksComp">내 등급</a></li>
+              <li>
+                <a class="dropdown-item" @click="routingMyBoards">내가 쓴 글</a>
+              </li>
+              <li>
+                <a class="dropdown-item" @click="routingMyAttendPrograms"
+                  >내가 신청한 프로그램</a
+                >
+              </li>
+              <li>
+                <a class="dropdown-item" @click="routingMyRanksComp">내 등급</a>
+              </li>
               <li><a class="dropdown-item" @click="logout">로그아웃</a></li>
             </ul>
           </div>
         </div>
-        <button v-if="!this.$store.state.isLogin" @click="routingLoginComp" type="button" class="btn btn-light">로그인</button>
-        <button v-if="!this.$store.state.isLogin" @click="routingCreateMemberComp" type="button" class="btn btn-light">회원가입</button>
-        <button v-else type="button" @click="routingCreateBoardComp" class="btn btn-light">글쓰기</button>
+        <button
+          v-if="!this.$store.state.isLogin"
+          @click="routingLoginComp"
+          type="button"
+          class="btn btn-light"
+        >
+          로그인
+        </button>
+        <button
+          v-if="!this.$store.state.isLogin"
+          @click="routingCreateMemberComp"
+          type="button"
+          class="btn btn-light"
+        >
+          회원가입
+        </button>
+        <button
+          v-else
+          type="button"
+          @click="routingCreateBoardComp"
+          class="btn btn-light"
+        >
+          글쓰기
+        </button>
       </div>
     </div>
   </nav>
@@ -40,28 +79,58 @@
       <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
           <div class="dropdown" style="margin-right: 15px">
-            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                    aria-expanded="false">
+            <button
+              class="btn btn-secondary dropdown-toggle"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
               {{ selectedCategory }}
             </button>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" @click="selectCategory('SPORTS')">SPORTS</a></li>
-              <li><a class="dropdown-item" @click="selectCategory('COMPUTER')">COMPUTER</a></li>
-              <li><a class="dropdown-item" @click="selectCategory('ART')">ART</a></li>
+              <li>
+                <a class="dropdown-item" @click="selectCategory('SPORTS')"
+                  >SPORTS</a
+                >
+              </li>
+              <li>
+                <a class="dropdown-item" @click="selectCategory('COMPUTER')"
+                  >COMPUTER</a
+                >
+              </li>
+              <li>
+                <a class="dropdown-item" @click="selectCategory('ART')">ART</a>
+              </li>
             </ul>
-            <button class="btn btn-secondary" @click="recentedSort"> 최신 순 정렬 </button>
-            <button class="btn btn-secondary" @click="nowOpenLists"> 모집 중 </button>
-
+            <button class="btn btn-secondary" @click="recentedSort">
+              최신 순 정렬
+            </button>
+            <button class="btn btn-secondary" @click="nowOpenLists">
+              모집 중
+            </button>
           </div>
 
           <form class="d-flex" role="search" style="margin-bottom: 15px">
-            <input class="form-control me-2" type="search" placeholder="검색어를 입력하세요" aria-label="Search">
-            <button class="btn btn-outline-success" type="submit" style="width: 80px">검색</button>
+            <input
+              class="form-control me-2"
+              type="search"
+              placeholder="검색어를 입력하세요"
+              aria-label="Search"
+            />
+            <button
+              class="btn btn-outline-success"
+              type="submit"
+              style="width: 80px"
+            >
+              검색
+            </button>
           </form>
         </div>
       </nav>
     </div>
-    <HomeBoardComp :programAllReadResponse="programAllReadResponse"></HomeBoardComp>
+    <HomeBoardComp
+      :programAllReadResponse="programAllReadResponse"
+    ></HomeBoardComp>
   </div>
   <router-view></router-view>
 </template>
@@ -71,84 +140,88 @@ import HomeBoardComp from "@/components/program/HomeBoardComp.vue";
 import axios from "axios";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HomeBoardComp
+    HomeBoardComp,
   },
   data() {
     return {
-      selectedCategory : '카테고리',
-      programAllReadResponse : []
-    }
+      selectedCategory: "카테고리",
+      programAllReadResponse: [],
+    };
   },
   methods: {
     routingMyBoards() {
-      this.$router.push('/boards/me');
+      this.$router.push("/boards/me");
     },
     routingMyAttendPrograms() {
-      this.$router.push('/programs/me')
+      this.$router.push("/programs/me");
     },
     routingMyRanksComp() {
-      this.$router.push('/ranks/me')
+      this.$router.push("/ranks/me");
     },
     routingCreateBoardComp() {
-      this.$router.push('/create/board')
+      this.$router.push("/create/board");
     },
-    routingCreateMemberComp(){
-      this.$router.push('/create/member')
+    routingCreateMemberComp() {
+      this.$router.push("/create/member");
     },
-    routingLoginComp(){
-      this.$router.push('/login')
+    routingLoginComp() {
+      this.$router.push("/login");
     },
-    selectCategory(category){
+    selectCategory(category) {
       this.selectedCategory = category;
-      axios.get(`${this.$store.state.host}/program/category/${category}`)
-          .then((response) => {
-            this.programAllReadResponse =  response.data.response;
-          })
-          .catch((error) => {
-            console.log('홈 화면 불러오기 오류 : ' + error);
-          })
+      axios
+        .get(`${this.$store.state.host}/program/category/${category}`)
+        .then((response) => {
+          this.programAllReadResponse = response.data.response;
+        })
+        .catch((error) => {
+          console.log("홈 화면 불러오기 오류 : " + error);
+        });
     },
 
-    recentedSort(){
-      axios.get(`${this.$store.state.host}/program/category/date`)
-          .then((response) => {
-            this.programAllReadResponse =  response.data.response;
-          })
-          .catch((error) => {
-            console.log('홈 화면 불러오기 오류 : ' + error);
-          })
+    recentedSort() {
+      axios
+        .get(`${this.$store.state.host}/program/category/date`)
+        .then((response) => {
+          this.programAllReadResponse = response.data.response;
+        })
+        .catch((error) => {
+          console.log("홈 화면 불러오기 오류 : " + error);
+        });
     },
 
-    nowOpenLists(){
-      axios.get(`${this.$store.state.host}/program/category/open`)
-          .then((response) => {
-            this.programAllReadResponse =  response.data.response;
-          })
-          .catch((error) => {
-            console.log('홈 화면 불러오기 오류 : ' + error);
-          })
+    nowOpenLists() {
+      axios
+        .get(`${this.$store.state.host}/program/category/open`)
+        .then((response) => {
+          this.programAllReadResponse = response.data.response;
+        })
+        .catch((error) => {
+          console.log("홈 화면 불러오기 오류 : " + error);
+        });
     },
 
     logout() {
-      alert('로그아웃 되었습니다');
-      this.$store.state.accessToken = '';
+      alert("로그아웃 되었습니다");
+      this.$store.state.accessToken = "";
       this.$store.state.isLogin = false;
-      this.$store.state.loginedEmail = '';
-      this.$router.push('/');
-    }
+      this.$store.state.loginedEmail = "";
+      this.$router.push("/");
+    },
   },
   mounted() {
-    axios.get(`${this.$store.state.host}/program/view`)
-        .then((response) => {
-          this.programAllReadResponse =  response.data.response;
-        })
-        .catch((error) => {
-          console.log('홈 화면 불러오기 오류 : ' + error);
-        })
-  }
-}
+    axios
+      .get(`${this.$store.state.host}/program/view`)
+      .then((response) => {
+        this.programAllReadResponse = response.data.response;
+      })
+      .catch((error) => {
+        console.log("홈 화면 불러오기 오류 : " + error);
+      });
+  },
+};
 </script>
 
 <style>
