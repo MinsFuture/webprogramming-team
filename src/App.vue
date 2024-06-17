@@ -16,7 +16,12 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/">Home</a>
+            <a class="nav-link active" aria-current="page" href="/">프로그램</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/chart"
+              >전국 프로그램 현황</a
+            >
           </li>
         </ul>
 
@@ -76,32 +81,52 @@
     <div class="center-content">
       <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
-          <div class="dropdown" style="margin-right: 15px">
-            <button class="btn btn-secondary" @click="recentedSort">
-              최신 순 정렬
-            </button>
-            <button class="btn btn-secondary" @click="nowOpenLists">
-              모집 중
-            </button>
-          </div>
-
           <form class="d-flex" role="search" style="margin-bottom: 15px">
             <input
               class="form-control me-2"
               type="search"
               placeholder="검색어를 입력하세요"
               aria-label="Search"
+              style="width: 500px"
             />
-            <button
-              class="btn btn-outline-success"
-              type="submit"
-              style="width: 80px"
-            >
-              검색
-            </button>
           </form>
+          <button
+            class="btn btn-outline-success"
+            type="submit"
+            style="width: 100px"
+          >
+            검색
+          </button>
         </div>
       </nav>
+    </div>
+    <div class="d-flex align-items-center justify-content-end mb-2">
+      <div>
+        <button
+          class="btn btn-link text-secondary me-2"
+          :class="{ 'text-primary': isRecentSorted }"
+          @click="recentedSort"
+        >
+          최신 순 정렬
+        </button>
+        <button
+          class="btn btn-link text-secondary"
+          :class="{ 'text-primary': isOpenLists }"
+          @click="nowOpenLists"
+        >
+          모집 중
+        </button>
+        <button
+          v-if="isOpenLists || isRecentSorted"
+          class="btn btn-link text-secondary"
+          @click="clearFilters"
+        >
+          필터 해제
+        </button>
+      </div>
+      <div v-if="selectedCategory !== '카테고리'" class="text-secondary">
+        선택된 카테고리: {{ selectedCategory }}
+      </div>
     </div>
     <HomeBoardComp
       :programAllReadResponse="programAllReadResponse"
@@ -123,6 +148,8 @@ export default {
     return {
       selectedCategory: "카테고리",
       programAllReadResponse: [],
+      isRecentSorted: false,
+      isOpenLists: false,
     };
   },
   methods: {
@@ -161,6 +188,8 @@ export default {
         .get(`${this.$store.state.host}/program/category/date`)
         .then((response) => {
           this.programAllReadResponse = response.data.response;
+          this.isRecentSorted = true;
+          this.isOpenLists = false;
         })
         .catch((error) => {
           console.log("홈 화면 불러오기 오류 : " + error);
@@ -172,10 +201,18 @@ export default {
         .get(`${this.$store.state.host}/program/category/open`)
         .then((response) => {
           this.programAllReadResponse = response.data.response;
+          this.isOpenLists = true;
+          this.isRecentSorted = false;
         })
         .catch((error) => {
           console.log("홈 화면 불러오기 오류 : " + error);
         });
+    },
+
+    clearFilters() {
+      this.isRecentSorted = false;
+      this.isOpenLists = false;
+      this.loadInitialData(); // 초기 데이터 다시 불러오기
     },
 
     logout() {
@@ -185,20 +222,23 @@ export default {
       this.$store.state.loginedEmail = "";
       this.$router.push("/");
     },
+
+    loadInitialData() {
+      axios
+        .get(`${this.$store.state.host}/program/view`)
+        .then((response) => {
+          this.programAllReadResponse = response.data.response;
+        })
+        .catch((error) => {
+          console.log("홈 화면 불러오기 오류 : " + error);
+        });
+    },
   },
   mounted() {
-    axios
-      .get(`${this.$store.state.host}/program/view`)
-      .then((response) => {
-        this.programAllReadResponse = response.data.response;
-      })
-      .catch((error) => {
-        console.log("홈 화면 불러오기 오류 : " + error);
-      });
+    this.loadInitialData();
   },
 };
 </script>
-
 <style>
 @import "assets/bootstrap.min.css";
 @import "bootstrap-icons/font/bootstrap-icons.css";
@@ -236,5 +276,9 @@ export default {
 
 .btn {
   margin-left: 1rem;
+}
+
+.text-primary {
+  font-weight: bold;
 }
 </style>

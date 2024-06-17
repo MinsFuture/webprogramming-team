@@ -1,21 +1,21 @@
 <template>
-  <div class="statistics-selector">
-    <div class="main-container">
-      <div class="sidebar">
-        <ul>
-          <li
-              v-for="category in categories"
-              :key="category"
-              :class="{ active: category === selectedCategory }"
-              @click="selectCategory(category)"
-          >
-            {{ category }}
-          </li>
-        </ul>
-      </div>
+  <div class="sidebar">
+    <ul>
+      <li
+        v-for="category in categories"
+        :key="category"
+        :class="{ active: category === selectedCategory }"
+        @click="selectCategory(category)"
+      >
+        {{ category }}
+      </li>
+    </ul>
+  </div>
 
+  <div class="statistics-selector">
+    <h2>{{ selectedCategory }}는 어떤 프로그램을 좋아할까?</h2>
+    <div class="main-container">
       <div class="content">
-        <h1>{{ selectedCategory }} 카테고리 연령 참여율</h1>
         <div v-if="filteredData">
           <canvas id="myPieChart"></canvas>
         </div>
@@ -37,15 +37,15 @@ export default {
     return {
       statisticsData: null,
       pieChart: null,
-      selectedCategory: "20대",
-      categories: ["20대", "30대", "40대", "50대", "60대", "70대"],
+      selectedCategory: "10대",
+      categories: ["10대", "20대", "30대", "40대", "50대", "60대", "70대"],
     };
   },
   computed: {
     filteredData() {
       if (!this.statisticsData) return null;
       const categoryMapping = {
-        "10대": "teen",
+        "10대": "teenager",
         "20대": "twenties",
         "30대": "thirties",
         "40대": "forties",
@@ -64,33 +64,30 @@ export default {
     async fetchStatisticsData() {
       try {
         const response = await axios.get(
-            `${this.$store.state.host}/program/data/age-category`
+          `${this.$store.state.host}/program/data/age-category`
         );
         this.statisticsData = response.data.response;
         console.log(this.statisticsData);
         this.$nextTick(() => {
-          this.renderPieChart(); // Render chart after DOM is updated
+          this.renderPieChart();
         });
       } catch (error) {
         console.error("Error fetching statistics data:", error);
       }
     },
     renderPieChart() {
-      // Ensure old chart is destroyed before rendering new one
       if (this.pieChart) {
         this.pieChart.destroy();
       }
 
-      // Render new chart only if there is data for the selected category
       if (this.filteredData) {
         const canvas = document.getElementById("myPieChart");
-        if (!canvas) return; // Ensure canvas element exists
-
+        if (!canvas) return;
         const ctx = canvas.getContext("2d");
-        if (!ctx) return; // Ensure canvas context exists
+        if (!ctx) return;
 
         const labels = Object.keys(this.filteredData).filter(
-            (key) => key !== "age"
+          (key) => key !== "age"
         );
         const values = labels.map((label) => this.filteredData[label]);
 
@@ -104,7 +101,7 @@ export default {
             case "art":
               return "예술";
             default:
-              return label; // Handle other cases if needed
+              return label;
           }
         });
 
@@ -146,11 +143,10 @@ export default {
       }
     },
     getRandomColors(numColors) {
-      // Generate random colors for each dataset
       const colors = [];
       for (let i = 0; i < numColors; i++) {
         const color = `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(
-            Math.random() * 256
+          Math.random() * 256
         )}, ${Math.floor(Math.random() * 256)}, 0.6)`;
         colors.push(color);
       }
@@ -159,7 +155,7 @@ export default {
     selectCategory(category) {
       this.selectedCategory = category;
       this.$nextTick(() => {
-        this.renderPieChart(); // Render chart after DOM is updated
+        this.renderPieChart();
       });
     },
   },
@@ -192,6 +188,9 @@ nav ul li {
 }
 
 .sidebar {
+  position: fixed;
+  top: 30%;
+  left: 50px;
   width: 200px;
   margin-right: 2rem;
   background-color: #f8f9fa;

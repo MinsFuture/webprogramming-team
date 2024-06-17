@@ -1,36 +1,3 @@
-<script>
-export default {
-  name: "HomeBoardComp",
-  props: {
-    programAllReadResponse: Array,
-  },
-  data() {
-    return {
-      selectedCategory: "전체",
-      categories: ["전체", "SPORTS", "COMPUTER", "ART"],
-    };
-  },
-  computed: {
-    filteredPrograms() {
-      if (this.selectedCategory === "전체") {
-        return this.programAllReadResponse;
-      }
-      return this.programAllReadResponse.filter(
-        (program) => program.category === this.selectedCategory
-      );
-    },
-  },
-  methods: {
-    routingDetailsComp(id) {
-      this.$router.push(`/board/${id}`);
-    },
-    selectCategory(category) {
-      this.selectedCategory = category;
-    },
-  },
-};
-</script>
-
 <template>
   <div class="main-container">
     <div class="sidebar">
@@ -41,7 +8,7 @@ export default {
           :class="{ active: category === selectedCategory }"
           @click="selectCategory(category)"
         >
-          {{ category }}
+          {{ getCategoryDisplayName(category) }}
         </li>
       </ul>
     </div>
@@ -89,6 +56,54 @@ export default {
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  name: "HomeBoardComp",
+  props: {
+    programAllReadResponse: Array,
+  },
+  data() {
+    return {
+      selectedCategory: "전체",
+      categories: ["전체", "SPORTS", "COMPUTER", "ART"],
+      categoryNames: {
+        전체: "ALL",
+        SPORTS: "SPORTS",
+        COMPUTER: "COMPUTER",
+        ART: "ART",
+      },
+    };
+  },
+  computed: {
+    filteredPrograms() {
+      if (this.selectedCategory === "전체") {
+        return this.programAllReadResponse;
+      }
+      return this.programAllReadResponse.filter(
+        (program) =>
+          program.category === this.categoryNames[this.selectedCategory]
+      );
+    },
+  },
+  methods: {
+    routingDetailsComp(id) {
+      this.$router.push(`/board/${id}`);
+    },
+    selectCategory(category) {
+      this.selectedCategory = category;
+    },
+    getCategoryDisplayName(category) {
+      return {
+        전체: "전체",
+        SPORTS: "스포츠",
+        COMPUTER: "컴퓨터",
+        ART: "예술",
+      }[category];
+    },
+  },
+};
+</script>
 
 <style scoped>
 .main-container {

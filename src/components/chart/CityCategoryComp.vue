@@ -1,24 +1,28 @@
 <template>
-  <div class="statistics-selector">
-    <div class="main-container">
-      <div class="sidebar">
-        <ul>
-          <li
-              v-for="category in categories"
-              :key="category"
-              :class="{ active: category === selectedCategory }"
-              @click="selectCategory(category)"
-          >
-            {{ category }}
-          </li>
-        </ul>
-      </div>
-
-      <div class="content">
-        <h1>{{ selectedCategory }} 카테고리 연령 참여율</h1>
-        <div v-if="filteredData.length">
-          <div v-for="(categoryData, index) in filteredData" :key="index">
-            <canvas :id="'myPieChart' + index"></canvas>
+  <div>
+    <div class="sidebar">
+      <ul>
+        <li
+          v-for="category in categories"
+          :key="category"
+          :class="{ active: category === selectedCategory }"
+          @click="selectCategory(category)"
+        >
+          {{ category }}
+        </li>
+      </ul>
+    </div>
+    <div class="statistics-selector">
+      <div class="main-container">
+        <div class="content">
+          <h2>{{ selectedCategory }} 카테고리는 어떤 연령대가 좋아할까?</h2>
+          <div v-if="filteredData.length">
+            <div v-for="(categoryData, index) in filteredData" :key="index">
+              <canvas :id="'myPieChart' + index"></canvas>
+            </div>
+          </div>
+          <div v-else>
+            <p>데이터가 없습니다.</p>
           </div>
         </div>
       </div>
@@ -44,8 +48,10 @@ export default {
   computed: {
     filteredData() {
       return this.statisticsData
-          ? this.statisticsData.filter((data) => data.category === this.selectedCategory)
-          : [];
+        ? this.statisticsData.filter(
+            (data) => data.category === this.selectedCategory
+          )
+        : [];
     },
   },
   created() {
@@ -55,7 +61,7 @@ export default {
     async fetchStatisticsData() {
       try {
         const response = await axios.get(
-            `${this.$store.state.host}/program/data/category-age`
+          `${this.$store.state.host}/program/data/category-age`
         );
         this.statisticsData = response.data.response.ageGroups;
         console.log(this.statisticsData);
@@ -77,7 +83,7 @@ export default {
       this.filteredData.forEach((categoryData, index) => {
         this.$nextTick(() => {
           const labels = Object.keys(categoryData).filter(
-              (key) => key !== "category" && key !== "city"
+            (key) => key !== "category" && key !== "city"
           );
           const data = labels.map((label) => categoryData[label]);
 
@@ -157,7 +163,7 @@ export default {
       const colors = [];
       for (let i = 0; i < numColors; i++) {
         const color = `rgba(${Math.floor(Math.random() * 256)}, ${Math.floor(
-            Math.random() * 256
+          Math.random() * 256
         )}, ${Math.floor(Math.random() * 256)}, 0.6)`;
         colors.push(color);
       }
@@ -198,19 +204,10 @@ nav ul li {
   margin-right: 10px;
 }
 
-button {
-  padding: 10px;
-  cursor: pointer;
-  background-color: #ddd;
-  border: none;
-  border-radius: 5px;
-}
-
-button:hover {
-  background-color: #bbb;
-}
-
 .sidebar {
+  position: fixed;
+  top: 30%;
+  left: 50px;
   width: 200px;
   margin-right: 2rem;
   background-color: #f8f9fa;
