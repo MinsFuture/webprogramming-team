@@ -295,7 +295,7 @@ export default {
         })
         .then(() => {
           alert("글을 삭제하였습니다");
-          this.$router.push("/");
+          window.location.href = "/";
         })
         .catch((error) => {
           alert("글 삭제 중 에러가 발생하였습니다");

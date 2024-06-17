@@ -1,4 +1,5 @@
 <script>
+/* global daum */
 import axios from "axios";
 
 export default {
@@ -14,6 +15,9 @@ export default {
         recruitmentEndDate: '',
         programDate: '',
         open : 'OPEN',
+        programAddress : '',
+        longitude : '',
+        latitude : '',
       },
       files: [],
       isFormValid: false,
@@ -29,6 +33,7 @@ export default {
 
       // 유효성 검사를 통과한 경우에만 제출
       if (this.isFormValid) {
+        this.getCoordinate();
 
         let id = this.$route.params.id;
         let formData = new FormData();
@@ -76,7 +81,57 @@ export default {
           this.ProgramUpdateRequest.category !== '' &&
           this.ProgramUpdateRequest.maximum > 0 &&
           this.ProgramUpdateRequest.programDate !== ''
-    }
+    },
+
+    openPostcodePopup() {
+      if (window.daum && window.daum.Postcode) {
+        new daum.Postcode({
+          oncomplete: (data) => {
+            // 도로명 주소로 변환
+            let roadAddr = data.roadAddress;
+            // 변환된 주소를 폼에 적용
+            this.ProgramUpdateRequest.programAddress = roadAddr;
+          },
+        }).open();
+      } else {
+        alert("주소 검색 API 로드에 실패했습니다.");
+      }
+    },
+    getCoordinate() {
+      const headers = {
+        Authorization: `KakaoAK 89812f89e48298b9f8581fa37b3270e7`,
+      };
+
+      console.log(this.ProgramUpdateRequest.programAddress);
+
+      axios
+          .get(
+              `https://dapi.kakao.com/v2/local/search/address.json?query=${this.ProgramUpdateRequest.programAddress}`,
+              { headers }
+          )
+          .then((response) => {
+            if (response.data.documents.length > 0) {
+              const result = response.data.documents[0];
+              this.ProgramUpdateRequest.longitude = result.x;
+              this.ProgramUpdateRequest.latitude = result.y;
+            } else {
+              alert("좌표를 찾을 수 없습니다.");
+            }
+          })
+          .catch((error) => {
+            console.error("좌표를 가져오는 중 오류가 발생했습니다:", error);
+          });
+    },
+  },
+  mounted() {
+    // 다음 주소 검색 API 스크립트 동적 로드
+    const script = document.createElement("script");
+    script.src =
+        "//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js";
+    script.onload = () => {
+      this.daumPostcodeLoaded = true;
+    };
+    document.head.appendChild(script);
   }
 }
 </script>
@@ -141,6 +196,19 @@ export default {
         <div class="invalid-feedback">
           프로그램 시작 날짜를 선택하세요
         </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="location" class="form-label">위치</label>
+        <input
+            type="text"
+            id="location"
+            v-model="ProgramUpdateRequest.programAddress"
+            class="form-control"
+            @click="openPostcodePopup"
+            readonly
+            required
+        />
       </div>
 
       <div class="mb-3">

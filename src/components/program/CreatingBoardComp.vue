@@ -16,6 +16,8 @@ export default {
         programDate: "",
         open: "OPEN",
         programAddress: "",
+        longitude : '',
+        latitude : '',
       },
       files: [],
       isFormValid: false,
@@ -48,6 +50,7 @@ export default {
 
       // 유효성 검사를 통과한 경우에만 제출
       if (this.isFormValid) {
+        this.getCoordinate();
         let formData = new FormData();
 
         formData.append(
@@ -129,6 +132,31 @@ export default {
       } else {
         alert("주소 검색 API 로드에 실패했습니다.");
       }
+    },
+    getCoordinate() {
+      const headers = {
+        Authorization: `KakaoAK 89812f89e48298b9f8581fa37b3270e7`,
+      };
+
+      console.log(this.ProgramSaveRequest.programAddress);
+
+      axios
+          .get(
+              `https://dapi.kakao.com/v2/local/search/address.json?query=${this.ProgramSaveRequest.programAddress}`,
+              { headers }
+          )
+          .then((response) => {
+            if (response.data.documents.length > 0) {
+              const result = response.data.documents[0];
+              this.ProgramSaveRequest.longitude = result.x;
+              this.ProgramSaveRequest.latitude = result.y;
+            } else {
+              alert("좌표를 찾을 수 없습니다.");
+            }
+          })
+          .catch((error) => {
+            console.error("좌표를 가져오는 중 오류가 발생했습니다:", error);
+          });
     },
     // 모집중 필터 해제 메서드 추가
     clearRecruitingFilter() {
@@ -283,20 +311,6 @@ export default {
       </div>
     </form>
     <div id="daumPostcode" style="display: none"></div>
-
-    <!-- 정렬 옵션 추가 -->
-    <div class="sort-options">
-      <label>정렬:</label>
-      <select v-model="selectedSort" @change="selectSort(selectedSort)">
-        <option
-          v-for="option in sortOptions"
-          :key="option.value"
-          :value="option.value"
-        >
-          {{ option.text }}
-        </option>
-      </select>
-    </div>
   </div>
 </template>
 <style scoped>
