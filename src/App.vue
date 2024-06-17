@@ -74,34 +74,9 @@
 
   <div v-if="this.$route.path === '/'">
     <div class="center-content">
-      <h1>열심히 살다 죽자</h1>
-
       <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
           <div class="dropdown" style="margin-right: 15px">
-            <button
-              class="btn btn-secondary dropdown-toggle"
-              type="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              {{ selectedCategory }}
-            </button>
-            <ul class="dropdown-menu">
-              <li>
-                <a class="dropdown-item" @click="selectCategory('SPORTS')"
-                  >SPORTS</a
-                >
-              </li>
-              <li>
-                <a class="dropdown-item" @click="selectCategory('COMPUTER')"
-                  >COMPUTER</a
-                >
-              </li>
-              <li>
-                <a class="dropdown-item" @click="selectCategory('ART')">ART</a>
-              </li>
-            </ul>
             <button class="btn btn-secondary" @click="recentedSort">
               최신 순 정렬
             </button>
