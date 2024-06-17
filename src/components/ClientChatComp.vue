@@ -1,22 +1,21 @@
 <script>
-
 import axios from "axios";
-import {Client} from "@stomp/stompjs";
+import { Client } from "@stomp/stompjs";
 
 /* eslint-disable */
 
 export default {
   name: "ClientChatComp",
-  components : {},
+  components: {},
   data() {
     return {
-      AddSubscriptionRequest : {
-        channelId : 1,
+      AddSubscriptionRequest: {
+        channelId: 1,
       },
-      id : 0,
-      messages : [],
-      content : '',
-    }
+      id: 0,
+      messages: [],
+      content: "",
+    };
   },
   created() {
     this.getSubscription().then(() => {
@@ -25,109 +24,160 @@ export default {
       });
     });
   },
-  methods : {
+  methods: {
     getSubscription() {
-      return axios.post(`${this.$store.state.host}/member-channel-subscription`, JSON.stringify(this.AddSubscriptionRequest), {
-        headers: {
-          Accesstoken: this.$store.state.accessToken,
-          'Content-Type': 'application/json'
-        }
-      }).then((response) => {
-        console.log('구독 성공 : ' + response.data.response);
-        // 메시지 불러오기
-      }).catch((error) => {
-        console.log('구독 실패 : ' + error);
-      })
+      return axios
+        .post(
+          `${this.$store.state.host}/member-channel-subscription`,
+          JSON.stringify(this.AddSubscriptionRequest),
+          {
+            headers: {
+              Accesstoken: this.$store.state.accessToken,
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((response) => {
+          console.log("구독 성공 : " + response.data.response);
+          // 메시지 불러오기
+        })
+        .catch((error) => {
+          console.log("구독 실패 : " + error);
+        });
     },
 
-    getAllMessages(){
-      return axios.get(`${this.$store.state.host}/message/public_channel/${this.$route.params.id}`)
-          .then((response) => {
-            this.messages = response.data.response;
-          })
-          .catch((error) => {
-            console.log('메시지 불러오기 오류 : ' + error);
-          })
+    getAllMessages() {
+      return axios
+        .get(
+          `${this.$store.state.host}/message/public_channel/${this.$route.params.id}`,
+          {
+            headers: {
+              Accesstoken: this.$store.state.accessToken,
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((response) => {
+          this.messages = response.data.response;
+        })
+        .catch((error) => {
+          console.log("메시지 불러오기 오류 : " + error);
+        });
     },
 
     connectWebSocket() {
       this.stompClient = new Client({
         brokerURL: `ws://localhost:8080/ws`,
         onConnect: () => {
-          console.log('WebSocket 연결 성공!');
-          this.stompClient.subscribe(`/topic/chat/public/${this.$route.params.id}`, (message) => {
-            this.messages.push(JSON.parse(message));
-          }, {
-            Accesstoken: this.$store.state.accessToken,
-          });
+          console.log("WebSocket 연결 성공!");
+          this.stompClient.subscribe(
+            `/topic/chat/public/${this.$route.params.id}`,
+            (message) => {
+              this.messages.push(JSON.parse(message));
+            },
+            {
+              Accesstoken: this.$store.state.accessToken,
+            }
+          );
         },
         onStompError: (frame) => {
-          console.error('WebSocket 연결 오류:', frame);
-          this.connectionStatus = '오류';
+          console.error("WebSocket 연결 오류:", frame);
+          this.connectionStatus = "오류";
         },
         onDisconnect: () => {
-          console.log('WebSocket 연결 종료');
-          this.connectionStatus = '종료됨';
+          console.log("WebSocket 연결 종료");
+          this.connectionStatus = "종료됨";
         },
       });
       this.stompClient.activate();
     },
 
-    sendMessage(){
+    sendMessage() {
+      const message = {
+        content: this.content,
+      };
+
+      const headers = {
+        Accesstoken: this.$store.state.accessToken,
+        // 다른 필요한 헤더들 추가 가능
+      };
+      console.log(headers);
+
+      console.log(this.$route.params.id);
       this.stompClient.publish({
         destination: `/app/chat/public/${this.$route.params.id}`,
-        body: JSON.stringify(this.content),
+        body: JSON.stringify(message),
+        headers: headers, // 헤더 객체를 넣어줍니다.
       });
 
-      this.content = '';
-    }
-  }
-}
+      this.content = "";
+    },
+  },
+};
 </script>
 
 <template>
   <div class="container">
     <div class="messaging">
-        <!-------------------- 메시지 ------------------>
-        <div class="mesgs">
-          <div class="msg_history">
-            <div class="incoming_msg">
-              <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
-              <div class="received_msg">
-                <div class="received_withd_msg">
-                  <p>Test which is a new approach to have all
-                    solutions</p>
-                  <span class="time_date"> 11:01 AM    |    June 9</span></div>
-              </div>
+      <!-------------------- 메시지 ------------------>
+      <div class="mesgs">
+        <div class="msg_history">
+          <div class="incoming_msg">
+            <div class="incoming_msg_img">
+              <img
+                src="https://ptetutorials.com/images/user-profile.png"
+                alt="sunil"
+              />
             </div>
-            <div class="outgoing_msg">
-              <div class="sent_msg">
-                <p>Test which is a new approach to have all
-                  solutions</p>
-                <span class="time_date"> 11:01 AM    |    June 9</span> </div>
-            </div>
-
-            <div class="incoming_msg">
-              <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"> </div>
-              <div class="received_msg">
-                <div class="received_withd_msg">
-                  <p>We work directly with our designers and suppliers,
-                    and sell direct to you, which means quality, exclusive
-                    products, at a price anyone can afford.</p>
-                  <span class="time_date"> 11:01 AM    |    Today</span></div>
+            <div class="received_msg">
+              <div class="received_withd_msg">
+                <p>Test which is a new approach to have all solutions</p>
+                <span class="time_date"> 11:01 AM | June 9</span>
               </div>
             </div>
           </div>
-          <div class="type_msg">
-            <div class="input_msg_write">
-              <input type="text" v-model="content" class="write_msg" placeholder="Type a message" />
-              <button @click="sendMessage" class="msg_send_btn" type="button"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
+          <div class="outgoing_msg">
+            <div class="sent_msg">
+              <p>Test which is a new approach to have all solutions</p>
+              <span class="time_date"> 11:01 AM | June 9</span>
             </div>
+          </div>
+
+          <div class="incoming_msg">
+            <div class="incoming_msg_img">
+              <img
+                src="https://ptetutorials.com/images/user-profile.png"
+                alt="sunil"
+              />
+            </div>
+            <div class="received_msg">
+              <div class="received_withd_msg">
+                <p>
+                  We work directly with our designers and suppliers, and sell
+                  direct to you, which means quality, exclusive products, at a
+                  price anyone can afford.
+                </p>
+                <span class="time_date"> 11:01 AM | Today</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="type_msg">
+          <div class="input_msg_write">
+            <input
+              type="text"
+              v-model="content"
+              class="write_msg"
+              placeholder="Type a message"
+            />
+            <button @click="sendMessage" class="msg_send_btn" type="button">
+              <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
+            </button>
           </div>
         </div>
       </div>
     </div>
-
+  </div>
 </template>
 
 <style scoped>
@@ -349,5 +399,4 @@ img {
   height: 516px;
   overflow-y: auto;
 }
-
 </style>
