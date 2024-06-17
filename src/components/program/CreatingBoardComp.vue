@@ -28,6 +28,9 @@ export default {
       ],
       isRecruitingFilter: false, // 모집 중 필터 상태 추가
       isProgramAddress: false,
+      CreateChannelRequest : {
+        title : 'Channel Title'
+      },
     };
   },
   mounted() {
@@ -64,7 +67,7 @@ export default {
         }
 
         axios
-          .post("http://localhost:8080/program", formData, {
+          .post(`${this.$store.state.host}/program`, formData, {
             headers: {
               "Content-Type": "multipart/form-data",
               Accesstoken: this.$store.state.accessToken,
@@ -72,6 +75,8 @@ export default {
           })
           .then((response) => {
             console.log(response);
+            // 채널 생성
+            this.createChannel('Channel Title');
             alert("글 등록에 성공하였습니다");
             this.$router.push(`/board/${response.data.response}`);
           })
@@ -83,6 +88,21 @@ export default {
         // 유효성 검사를 통과하지 못한 경우 사용자에게 메시지 표시
         alert("양식을 다시 확인해주세요.");
       }
+    },
+
+    createChannel(title){
+      this.CreateChannelRequest = { title : title};
+
+      axios.post(`${this.$store.state.host}/channel/public`, JSON.stringify(this.CreateChannelRequest), {
+        headers : {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then((response) => {
+        console.log(response);
+      }).catch((error) => {
+        console.log('채팅 채널 생성 오류 ' + error);
+      })
     },
 
     handleFileChange(event) {

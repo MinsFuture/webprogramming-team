@@ -7,7 +7,8 @@ import CreateMemberComp from "@/components/CreateMemberComp.vue";
 import LoginFormComp from "@/components/LoginFormComp.vue";
 import DetailBoardComp from "@/components/program/DetailBoardComp.vue";
 import UpdateBoardComp from "@/components/program/UpdateBoardComp.vue";
-import Chart from "@/components/ChartSelector.vue";
+import Chart from "@/components/chart/ChartSelector.vue";
+import ClientChatComp from "@/components/ClientChatComp.vue";
 const routes = [
   {
     path: "/boards/me",
@@ -45,6 +46,10 @@ const routes = [
     path: "/chart",
     component: Chart,
   },
+  {
+    path: "/client/chat/:id",
+    component: ClientChatComp
+  }
 ];
 
 const router = createRouter({

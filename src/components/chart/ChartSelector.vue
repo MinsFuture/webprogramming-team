@@ -22,8 +22,8 @@
 
 <script>
 import {defineComponent} from "vue";
-import CityCategoryComp from "@/components/CityCategoryComp.vue";
-import AgeCategoryComp from "@/components/AgeCategoryComp.vue";
+import CityCategoryComp from "@/components/chart/CityCategoryComp.vue";
+import AgeCategoryComp from "@/components/chart/AgeCategoryComp.vue";
 
 export default defineComponent({
   components: {AgeCategoryComp, CityCategoryComp},
