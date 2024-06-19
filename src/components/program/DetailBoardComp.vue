@@ -159,7 +159,13 @@
           >
             신청하기
           </button>
-          <button @click="routingClientChatComp(1)" type="button" class="btn btn-primary">채팅하기</button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            @click="routingAllChatComp"
+          >
+            채팅하기
+          </button>
           <!-- 삭제 및 수정 버튼 -->
           <div class="mt-3">
             <button
@@ -211,7 +217,6 @@ export default {
         open: "",
         recruitment: 0,
         images: [],
-        channelId : 0,
       },
     };
   },
@@ -285,9 +290,6 @@ export default {
     routingUpdateComp() {
       this.$router.push(`/board/update/${this.$route.params.id}`);
     },
-    routingClientChatComp(channelId){
-      this.$router.push(`/client/chat/${channelId}`);
-    },
     deleteProgram() {
       let id = this.$route.params.id;
 
@@ -299,7 +301,7 @@ export default {
         })
         .then(() => {
           alert("글을 삭제하였습니다");
-          window.location.href = "/";
+          this.$router.push("/");
         })
         .catch((error) => {
           alert("글 삭제 중 에러가 발생하였습니다");
@@ -323,6 +325,9 @@ export default {
           console.log("프로그램 신청 에러 : " + error);
           alert("이미 신청 한 프로그램입니다");
         });
+    },
+    routingAllChatComp() {
+      this.$router.push(`/client/chat/${this.$route.params.id}`);
     },
   },
   created() {
