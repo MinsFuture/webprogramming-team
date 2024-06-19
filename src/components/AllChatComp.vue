@@ -5,12 +5,12 @@ import { Client } from "@stomp/stompjs";
 /* eslint-disable */
 
 export default {
-  name: "ClientChatComp",
+  name: "AllChatComp",
   components: {},
   data() {
     return {
       AddSubscriptionRequest: {
-        channelId: 1,
+        channelId: this.$route.params.id,
       },
       id: 0,
       messages: [],
@@ -59,6 +59,8 @@ export default {
         )
         .then((response) => {
           this.messages = response.data.response;
+          console.log(this.messages);
+          console.log(this.$store.state.loginedEmail);
         })
         .catch((error) => {
           console.log("메시지 불러오기 오류 : " + error);
@@ -66,25 +68,24 @@ export default {
     },
 
     connectWebSocket() {
-      // WebSocket 연결 시 Access Token을 포함한 헤더 설정
-      //      const headers = {
-      //       Accesstoken: this.$store.state.accessToken,
-      //     };
-
-      // WebSocket 클라이언트 생성 및 설정
       this.stompClient = new Client({
         brokerURL: `ws://localhost:8080/ws`,
         connectHeaders: {
-          Accesstoken2: `Bearer ${this.$store.state.accessToken}`,
-        }, // connectHeaders를 이용해 헤더 설정
+          Accesstoken: `Bearer ${this.$store.state.accessToken}`,
+        },
         onConnect: () => {
           console.log("WebSocket 연결 성공!");
-          // 구독할 토픽 설정
           this.stompClient.subscribe(
             `/topic/chat/public/${this.$route.params.id}`,
             (message) => {
-              this.messages.push(JSON.parse(message));
-            }
+              try {
+                const parsedMessage = JSON.parse(message.body);
+                this.messages.push(parsedMessage);
+              } catch (e) {
+                console.error("메시지 파싱 오류:", e);
+              }
+            },
+            { Accesstoken: `Bearer ${this.$store.state.accessToken}` }
           );
         },
         onStompError: (frame) => {
@@ -97,18 +98,17 @@ export default {
         },
       });
 
-      // WebSocket 활성화
       this.stompClient.activate();
     },
 
     sendMessage() {
       const message = {
         content: this.content,
+        Accesstoken: `${this.$store.state.accessToken}`,
       };
 
       const headers = {
-        Accesstoken: this.$store.state.accessToken,
-        // 다른 필요한 헤더들 추가 가능
+        Accesstoken: `Bearer ${this.$store.state.accessToken}`,
       };
       console.log(headers);
 
@@ -116,9 +116,8 @@ export default {
       this.stompClient.publish({
         destination: `/app/chat/public/${this.$route.params.id}`,
         body: JSON.stringify(message),
-        headers: headers, // 헤더 객체를 넣어줍니다.
+        headers: headers,
       });
-
       this.content = "";
     },
   },
@@ -128,46 +127,37 @@ export default {
 <template>
   <div class="container">
     <div class="messaging">
-      <!-------------------- 메시지 ------------------>
       <div class="mesgs">
         <div class="msg_history">
-          <div class="incoming_msg">
-            <div class="incoming_msg_img">
+          <div
+            v-for="(message, index) in messages"
+            :key="index"
+            :class="
+              message.senderEmail === this.$store.state.loginedEmail
+                ? 'outgoing_msg'
+                : 'incoming_msg'
+            "
+          >
+            <div
+              v-if="message.senderEmail !== this.$store.state.loginedEmail"
+              class="incoming_msg_img"
+            >
               <img
                 src="https://ptetutorials.com/images/user-profile.png"
-                alt="sunil"
-              />
+                alt="user"
+              />{{ message.senderEmail }}
             </div>
-            <div class="received_msg">
-              <div class="received_withd_msg">
-                <p>Test which is a new approach to have all solutions</p>
-                <span class="time_date"> 11:01 AM | June 9</span>
-              </div>
-            </div>
-          </div>
-          <div class="outgoing_msg">
-            <div class="sent_msg">
-              <p>Test which is a new approach to have all solutions</p>
-              <span class="time_date"> 11:01 AM | June 9</span>
-            </div>
-          </div>
-
-          <div class="incoming_msg">
-            <div class="incoming_msg_img">
-              <img
-                src="https://ptetutorials.com/images/user-profile.png"
-                alt="sunil"
-              />
-            </div>
-            <div class="received_msg">
-              <div class="received_withd_msg">
-                <p>
-                  We work directly with our designers and suppliers, and sell
-                  direct to you, which means quality, exclusive products, at a
-                  price anyone can afford.
-                </p>
-                <span class="time_date"> 11:01 AM | Today</span>
-              </div>
+            <div
+              :class="
+                message.senderEmail === this.$store.state.loginedEmail
+                  ? 'sent_msg'
+                  : 'received_withd_msg'
+              "
+            >
+              <p>{{ message.content }}</p>
+              <span class="time_date">
+                {{ new Date().toLocaleTimeString() }} | Today
+              </span>
             </div>
           </div>
         </div>
@@ -200,13 +190,13 @@ export default {
 }
 
 img {
-  max-width: 100%;
+  max-width: 40%;
 }
 
 .mesgs {
   float: none; /* 플로팅 해제 */
   padding: 30px 15px 0 25px;
-  width: 60%;
+  width: 500px;
   margin: 0 auto; /* 수평 중앙 정렬 */
 }
 
