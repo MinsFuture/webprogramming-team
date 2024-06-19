@@ -16,8 +16,6 @@ export default {
         programDate: "",
         open: "OPEN",
         programAddress: "",
-        longitude : '',
-        latitude : '',
       },
       files: [],
       isFormValid: false,
@@ -28,9 +26,6 @@ export default {
       ],
       isRecruitingFilter: false, // 모집 중 필터 상태 추가
       isProgramAddress: false,
-      CreateChannelRequest : {
-        title : 'Channel Title'
-      },
     };
   },
   mounted() {
@@ -47,13 +42,13 @@ export default {
     submitForm(event) {
       event.preventDefault(); // 기본 제출 동작을 막습니다.
       // 양식 제출 전에 유효성 검사 실행
+      console.log(this.$store.state.accessToken);
       this.checkFormValidity();
       console.log(this.ProgramSaveRequest);
       console.log(this.files);
-
+      console.log(this.$store.state.accessToken);
       // 유효성 검사를 통과한 경우에만 제출
       if (this.isFormValid) {
-        this.getCoordinate();
         let formData = new FormData();
 
         formData.append(
@@ -67,7 +62,7 @@ export default {
         }
 
         axios
-          .post(`${this.$store.state.host}/program`, formData, {
+          .post("http://localhost:8080/program", formData, {
             headers: {
               "Content-Type": "multipart/form-data",
               Accesstoken: this.$store.state.accessToken,
@@ -75,8 +70,6 @@ export default {
           })
           .then((response) => {
             console.log(response);
-            // 채널 생성
-            this.createChannel('Channel Title');
             alert("글 등록에 성공하였습니다");
             this.$router.push(`/board/${response.data.response}`);
           })
@@ -88,21 +81,6 @@ export default {
         // 유효성 검사를 통과하지 못한 경우 사용자에게 메시지 표시
         alert("양식을 다시 확인해주세요.");
       }
-    },
-
-    createChannel(title){
-      this.CreateChannelRequest = { title : title};
-
-      axios.post(`${this.$store.state.host}/channel/public`, JSON.stringify(this.CreateChannelRequest), {
-        headers : {
-          'Content-Type': 'application/json'
-        }
-      })
-      .then((response) => {
-        console.log(response);
-      }).catch((error) => {
-        console.log('채팅 채널 생성 오류 ' + error);
-      })
     },
 
     handleFileChange(event) {
@@ -152,31 +130,6 @@ export default {
       } else {
         alert("주소 검색 API 로드에 실패했습니다.");
       }
-    },
-    getCoordinate() {
-      const headers = {
-        Authorization: `KakaoAK 89812f89e48298b9f8581fa37b3270e7`,
-      };
-
-      console.log(this.ProgramSaveRequest.programAddress);
-
-      axios
-          .get(
-              `https://dapi.kakao.com/v2/local/search/address.json?query=${this.ProgramSaveRequest.programAddress}`,
-              { headers }
-          )
-          .then((response) => {
-            if (response.data.documents.length > 0) {
-              const result = response.data.documents[0];
-              this.ProgramSaveRequest.longitude = result.x;
-              this.ProgramSaveRequest.latitude = result.y;
-            } else {
-              alert("좌표를 찾을 수 없습니다.");
-            }
-          })
-          .catch((error) => {
-            console.error("좌표를 가져오는 중 오류가 발생했습니다:", error);
-          });
     },
     // 모집중 필터 해제 메서드 추가
     clearRecruitingFilter() {
@@ -331,6 +284,20 @@ export default {
       </div>
     </form>
     <div id="daumPostcode" style="display: none"></div>
+
+    <!-- 정렬 옵션 추가 -->
+    <div class="sort-options">
+      <label>정렬:</label>
+      <select v-model="selectedSort" @change="selectSort(selectedSort)">
+        <option
+          v-for="option in sortOptions"
+          :key="option.value"
+          :value="option.value"
+        >
+          {{ option.text }}
+        </option>
+      </select>
+    </div>
   </div>
 </template>
 <style scoped>
