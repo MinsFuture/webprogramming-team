@@ -9,14 +9,51 @@
     >
       <div class="mb-3">
         <label for="email" class="form-label">이메일:</label>
-        <input
-          type="email"
-          id="email"
-          v-model="form.email"
-          class="form-control"
-          required
-        />
+        <div class="input-group">
+          <input
+            type="email"
+            id="email"
+            v-model="form.email"
+            class="form-control"
+            required
+          />
+          <button
+            class="custom-btn-sm"
+            type="button"
+            @click="sendEmailVerificationCode"
+            :disabled="isCodeSent"
+          >
+            인증하기
+          </button>
+        </div>
         <div class="invalid-feedback">이메일을 입력해주세요.</div>
+      </div>
+
+      <div class="mb-3">
+        <label for="emailCode" class="form-label">이메일 인증 코드:</label>
+        <div class="input-group">
+          <input
+            type="text"
+            id="emailCode"
+            v-model="emailCode"
+            class="form-control"
+            :disabled="!isCodeSent"
+            @blur="verifyEmailCode"
+            required
+          />
+          <button
+            class="custom-btn-sm"
+            type="button"
+            @click="verifyEmailCode"
+            size="sm"
+          >
+            확인
+          </button>
+        </div>
+
+        <!-- <div v-if="isEmailVerified" class="invalid-feedback">
+          이메일 인증 코드를 확인해주세요.
+        </div> -->
       </div>
 
       <div class="mb-3">
@@ -122,6 +159,9 @@ export default {
         latitude: 0.0,
       },
       location: "",
+      emailCode: "",
+      isEmailVerified: false,
+      isCodeSent: false, // 이메일 코드 전송 여부
     };
   },
   mounted() {
@@ -136,6 +176,11 @@ export default {
   },
   methods: {
     submitForm() {
+      if (!this.isEmailVerified) {
+        alert("이메일 인증을 완료해주세요.");
+        return;
+      }
+
       if (this.$refs.form.checkValidity()) {
         // 폼이 유효한 경우 처리 로직 (예: API 호출)
         this.getCoordinate();
@@ -161,6 +206,50 @@ export default {
         // 유효하지 않은 경우 폼 검증 트리거
         this.$refs.form.classList.add("was-validated");
       }
+    },
+    sendEmailVerificationCode() {
+      axios
+        .post(
+          "http://localhost:8080/email/mailsend",
+          { email: this.form.email },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then(() => {
+          alert("이메일로 인증 코드가 전송되었습니다.");
+          this.isCodeSent = true; // 코드 전송 성공 시 활성화
+        })
+        .catch((error) => {
+          console.log("이메일 인증 코드 전송 실패: " + error);
+        });
+    },
+    verifyEmailCode() {
+      axios
+        .post(
+          "http://localhost:8080/email/mailAuthCheck",
+          {
+            email: this.form.email,
+            authNum: this.emailCode,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((response) => {
+          const message = response.data.response.message;
+          console.log(message);
+          alert(message);
+          this.isEmailVerified = message === "이메일 인증 완료";
+        })
+        .catch((error) => {
+          console.log("이메일 인증 실패: " + error);
+          alert("이메일 인증 코드가 올바르지 않습니다.");
+        });
     },
     openPostcodePopup() {
       if (window.daum && window.daum.Postcode) {
@@ -230,6 +319,7 @@ export default {
   padding: 0.5em;
   border: 1px solid #ccc;
   border-radius: 5px;
+  margin-right: 10px;
 }
 
 .create-member .btn {
@@ -243,5 +333,32 @@ export default {
 
 .create-member .btn:hover {
   background-color: #0056b3;
+}
+
+.input-group {
+  display: flex;
+}
+
+.input-group .form-control {
+  flex: 1;
+}
+
+.input-group .btn {
+  flex-shrink: 0;
+}
+
+.custom-btn-sm {
+  font-size: 0.8rem;
+  padding: 0.25em 0.5em;
+  border-radius: 0.2rem;
+  width: 80px;
+  height: 42px;
+  color: #6c757d;
+  border: 1px solid #6c757d;
+}
+
+.custom-btn-sm:hover {
+  background-color: #6c757d;
+  color: #fff;
 }
 </style>

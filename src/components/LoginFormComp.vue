@@ -1,69 +1,92 @@
 <template>
-  <div class="login-form">
-    <h2>로그인</h2>
-    <form @submit.prevent="submitForm" ref="form" novalidate class="was-validated">
-      <div class="mb-3">
-        <label for="email" class="form-label">이메일:</label>
-        <input type="email" id="email" v-model="form.email" class="form-control" required />
-        <div class="invalid-feedback">이메일을 입력해주세요.</div>
-      </div>
+  <div>
+    <div class="login-form">
+      <h2>로그인</h2>
+      <form
+        @submit.prevent="submitForm"
+        ref="form"
+        novalidate
+        class="was-validated"
+      >
+        <div class="mb-3">
+          <label for="email" class="form-label">이메일:</label>
+          <input
+            type="email"
+            id="email"
+            v-model="form.email"
+            class="form-control"
+            required
+          />
+          <div class="invalid-feedback">이메일을 입력해주세요.</div>
+        </div>
 
-      <div class="mb-3">
-        <label for="password" class="form-label">비밀번호:</label>
-        <input type="password" id="password" v-model="form.password" class="form-control" required />
-        <div class="invalid-feedback">비밀번호를 입력해주세요.</div>
-      </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">비밀번호:</label>
+          <input
+            type="password"
+            id="password"
+            v-model="form.password"
+            class="form-control"
+            required
+          />
+          <div class="invalid-feedback">비밀번호를 입력해주세요.</div>
+        </div>
 
-      <div class="mb-3">
-        <button class="btn btn-primary" type="submit">로그인</button>
-      </div>
-    </form>
+        <div class="mb-3">
+          <button class="btn btn-primary" type="submit">로그인</button>
+        </div>
+      </form>
+    </div>
+    <NotificationComponent v-if="this.$store.state.isLogin" />
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import NotificationComponent from "./NotificationComponent.vue"; // 알림 컴포넌트 경로
 
 export default {
   name: "LoginForm",
+  components: {
+    NotificationComponent,
+  },
   data() {
     return {
       form: {
         email: "",
-        password: ""
-      }
+        password: "",
+      },
     };
   },
   methods: {
     submitForm() {
       if (this.$refs.form.checkValidity()) {
-        // 폼이 유효한 경우 처리 로직 (예: API 호출)
-        console.log(this.form);
-
-        // 로그인 API 호출
         this.login();
       } else {
-        // 유효하지 않은 경우 폼 검증 트리거
-        this.$refs.form.classList.add('was-validated');
+        this.$refs.form.classList.add("was-validated");
       }
     },
     login() {
-      axios.post('http://localhost:8080/login', JSON.stringify(this.form), {
-        headers : {
-          'Content-Type': 'application/json'
-        }
-      })
-          .then((response) => {
-            alert('로그인 성공!')
-            this.$router.push("/")
-            this.$store.commit('loginSuccessInit', {email : this.form.email, accessToken :  response.headers.get('accessToken')})
-          })
-          .catch((error) => {
-            alert('로그인 실패! 비밀번호를 확인해주세요')
-            console.log('로그인 에러 ' + error);
-          })
-    }
-  }
+      axios
+        .post("http://localhost:8080/login", JSON.stringify(this.form), {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then((response) => {
+          alert("로그인 성공!");
+          this.$router.push("/");
+          this.$store.commit("loginSuccessInit", {
+            email: this.form.email,
+            accessToken: response.headers.get("accessToken"),
+          });
+        })
+        .catch((error) => {
+          alert("로그인 실패! 비밀번호를 확인해주세요");
+          console.log("로그인 에러 " + error);
+        });
+    },
+  },
 };
 </script>
 

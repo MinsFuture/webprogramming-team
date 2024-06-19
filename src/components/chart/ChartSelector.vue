@@ -4,41 +4,58 @@
       <nav>
         <ul>
           <li>
-            <button @click="selectNumber(0)" >지역별 카테고리 참여율</button>
+            <button
+              @click="selectNumber(0)"
+              :class="{ active: selectedNumber === 0 }"
+            >
+              카테고리별 연령 참여율
+            </button>
           </li>
           <li>
-            <button @click="selectNumber(1)">카테고리별 연령 참여율</button>
+            <button
+              @click="selectNumber(1)"
+              :class="{ active: selectedNumber === 1 }"
+            >
+              연령별 카테고리 참여율
+            </button>
           </li>
           <li>
-            <button @click="selectNumber(2)">연령별 카테고리 참여율</button>
+            <button
+              @click="selectNumber(2)"
+              :class="{ active: selectedNumber === 2 }"
+            >
+              지역별 카테고리 참여율
+            </button>
           </li>
         </ul>
       </nav>
     </header>
-    <AgeCategoryComp v-if="selectedNumber === 0"></AgeCategoryComp>
-    <CityCategoryComp v-if="selectedNumber === 1"></CityCategoryComp>
+    <CityCategoryComp v-if="selectedNumber === 0"></CityCategoryComp>
+    <AgeCategoryComp v-if="selectedNumber === 1"></AgeCategoryComp>
+    <CityCategoryAgeChart v-if="selectedNumber === 2"></CityCategoryAgeChart>
   </div>
 </template>
 
 <script>
-import {defineComponent} from "vue";
+import { defineComponent } from "vue";
 import CityCategoryComp from "@/components/chart/CityCategoryComp.vue";
 import AgeCategoryComp from "@/components/chart/AgeCategoryComp.vue";
+import CityCategoryAgeChart from "@/components/chart/CityCategoryAgeChart.vue";
 
 export default defineComponent({
-  components: {AgeCategoryComp, CityCategoryComp},
+  components: { AgeCategoryComp, CityCategoryComp, CityCategoryAgeChart },
   data() {
     return {
-      selectedNumber : 0,
-    }
+      selectedNumber: 0,
+    };
   },
-  methods : {
-    selectNumber(id){
+  methods: {
+    selectNumber(id) {
       this.selectedNumber = id;
       console.log(this.selectedNumber);
     },
-  }
-})
+  },
+});
 </script>
 
 <style scoped>
@@ -67,9 +84,15 @@ button {
   background-color: #ddd;
   border: none;
   border-radius: 5px;
+  transition: background-color 0.3s;
 }
 
 button:hover {
   background-color: #bbb;
+}
+
+button.active {
+  background-color: #1a1a1c;
+  color: white;
 }
 </style>
