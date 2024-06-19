@@ -26,7 +26,10 @@
         </ul>
 
         <div class="icon-group ms-auto">
-          <i class="bi bi-chat-fill text-white"></i>
+          <i
+            class="bi bi-chat-fill text-white"
+            @click="routingProgramPrivateChatComp"
+          ></i>
           <div v-if="this.$store.state.isLogin" class="dropdown-center">
             <i
               class="bi bi-person-circle text-white dropdown-toggle"
@@ -170,6 +173,9 @@ export default {
     },
     routingLoginComp() {
       this.$router.push("/login");
+    },
+    routingProgramPrivateChatComp() {
+      this.$router.push("/client/chats/program_private");
     },
     selectCategory(category) {
       this.selectedCategory = category;

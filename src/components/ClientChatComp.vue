@@ -66,17 +66,24 @@ export default {
     },
 
     connectWebSocket() {
+      // WebSocket 연결 시 Access Token을 포함한 헤더 설정
+      //      const headers = {
+      //       Accesstoken: this.$store.state.accessToken,
+      //     };
+
+      // WebSocket 클라이언트 생성 및 설정
       this.stompClient = new Client({
         brokerURL: `ws://localhost:8080/ws`,
+        connectHeaders: {
+          Accesstoken2: `Bearer ${this.$store.state.accessToken}`,
+        }, // connectHeaders를 이용해 헤더 설정
         onConnect: () => {
           console.log("WebSocket 연결 성공!");
+          // 구독할 토픽 설정
           this.stompClient.subscribe(
             `/topic/chat/public/${this.$route.params.id}`,
             (message) => {
               this.messages.push(JSON.parse(message));
-            },
-            {
-              Accesstoken: this.$store.state.accessToken,
             }
           );
         },
@@ -89,6 +96,8 @@ export default {
           this.connectionStatus = "종료됨";
         },
       });
+
+      // WebSocket 활성화
       this.stompClient.activate();
     },
 
