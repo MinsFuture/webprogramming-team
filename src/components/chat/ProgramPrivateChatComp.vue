@@ -11,14 +11,15 @@
           </div>
           <div class="inbox_chat">
             <div
-              class="chat_list active_chat"
+              class="chat_list"
+              :class="{ active_chat: chatroom.channelId === selectedChannelId }"
               v-for="(chatroom, index) in myChatsResponse"
               :key="index"
               @click="selectChatroom(chatroom.channelId)"
             >
               <div class="chat_people">
                 <div class="chat_img">
-                  <img :src="`${chatroom.imageUrl}`" />
+                  <img :src="chatroom.imageUrl" />
                 </div>
                 <div class="chat_ib">
                   <h4>
@@ -53,6 +54,7 @@ export default {
     return {
       myChatsResponse: [],
       channelId: null,
+      selectedChannelId: null,
     };
   },
 
@@ -75,6 +77,7 @@ export default {
   methods: {
     selectChatroom(channelId) {
       this.channelId = channelId;
+      this.selectedChannelId = channelId;
       console.log(this.channelId);
     },
   },
@@ -191,7 +194,7 @@ img {
 }
 
 .active_chat {
-  background: #ebebeb;
+  background: #fbe795;
 }
 
 .incoming_msg_img {

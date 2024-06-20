@@ -1,30 +1,30 @@
-import { createStore } from 'vuex'
-import createPersistedState from 'vuex-persistedstate';
+import { createStore } from "vuex";
+import createPersistedState from "vuex-persistedstate";
 // import axios from "axios";
 
 const store = createStore({
-    state(){
-        return {
-            accessToken : '',
-            isLogin : false,
-            loginedEmail : '',
-            // 35.216.104.192
-            host : 'http://localhost:8080',
-        }
+  state() {
+    return {
+      accessToken: "",
+      isLogin: false,
+      loginedEmail: "",
+      // 35.216.104.192
+      host: "http://35.216.104.192:8080",
+    };
+  },
+  mutations: {
+    loginSuccessInit(state, { email, accessToken }) {
+      state.isLogin = true;
+      state.loginedEmail = email;
+      state.accessToken = accessToken;
     },
-    mutations : {
-        loginSuccessInit(state, { email, accessToken}){
-            state.isLogin = true;
-            state.loginedEmail = email;
-            state.accessToken = accessToken;
-        }
-    },
-    actions : {
+  },
+  actions: {},
+  plugins: [
+    createPersistedState({
+      paths: ["loginedEmail", "isLogin", "accessToken"], // 영구적으로 저장할 상태 정의
+    }),
+  ],
+});
 
-    },
-    plugins: [createPersistedState({
-        paths: ['loginedEmail', 'isLogin', 'accessToken']  // 영구적으로 저장할 상태 정의
-    })]
-})
-
-export default store
+export default store;
