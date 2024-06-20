@@ -9,7 +9,8 @@ const store = createStore({
       isLogin: false,
       loginedEmail: "",
       // 35.216.104.192
-      host: "http://35.216.104.192:8080",
+      host: "http://localhost:8080",
+      ws: "ws://localhost:8080",
     };
   },
   mutations: {
