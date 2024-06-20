@@ -52,7 +52,6 @@ export default {
         )
         .then((response) => {
           console.log("구독 성공 : " + response.data.response);
-          // 메시지 불러오기
         })
         .catch((error) => {
           console.log("구독 실패 : " + error);
@@ -74,6 +73,9 @@ export default {
           this.messages = response.data.response;
           console.log(this.messages);
           console.log(this.$store.state.loginedEmail);
+          this.$nextTick(() => {
+            this.scrollToBottom();
+          });
         })
         .catch((error) => {
           console.log("메시지 불러오기 오류 : " + error);
@@ -86,8 +88,7 @@ export default {
       }
 
       this.stompClient = new Client({
-        // 35.216.104.192
-        brokerURL: `ws://localhost:8080/ws`,
+        brokerURL: `ws://35.216.104.192:8080/ws`,
         connectHeaders: {
           Accesstoken: `Bearer ${this.$store.state.accessToken}`,
         },
@@ -99,6 +100,9 @@ export default {
               try {
                 const parsedMessage = JSON.parse(message.body);
                 this.messages.push(parsedMessage);
+                this.$nextTick(() => {
+                  this.scrollToBottom();
+                });
               } catch (e) {
                 console.error("메시지 파싱 오류:", e);
               }
@@ -137,6 +141,14 @@ export default {
         headers: headers,
       });
       this.content = "";
+      this.$nextTick(() => {
+        this.scrollToBottom();
+      });
+    },
+
+    scrollToBottom() {
+      const container = this.$el.querySelector(".msg_history");
+      container.scrollTop = container.scrollHeight;
     },
   },
 };
