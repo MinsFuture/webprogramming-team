@@ -327,7 +327,9 @@ export default {
         });
     },
     routingAllChatComp() {
-      this.$router.push(`/client/chat/${this.$route.params.id}`);
+      this.$router.push(
+        `/client/chat/${this.programIdReadResponse.publicChannelId}`
+      );
     },
   },
   created() {
@@ -338,6 +340,7 @@ export default {
       .get(`http://localhost:8080/program/view/${id}`)
       .then((response) => {
         this.programIdReadResponse = response.data.response;
+        console.log(this.programIdReadResponse);
       })
       .catch((error) => {
         console.log("Get 에러 " + error);

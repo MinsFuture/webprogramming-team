@@ -21,13 +21,23 @@ export default {
   },
   created() {
     console.log("Received channelId: ", this.channelId);
-    this.getSubscription().then(() => {
-      this.getAllMessages().then(() => {
-        this.connectWebSocket();
-      });
-    });
+    this.initializeComponent();
+  },
+  watch: {
+    channelId(newChannelId, oldChannelId) {
+      console.log(`channelId changed from ${oldChannelId} to ${newChannelId}`);
+      this.initializeComponent();
+    },
   },
   methods: {
+    initializeComponent() {
+      this.getSubscription().then(() => {
+        this.getAllMessages().then(() => {
+          this.connectWebSocket();
+        });
+      });
+    },
+
     getSubscription() {
       return axios
         .post(
@@ -71,6 +81,10 @@ export default {
     },
 
     connectWebSocket() {
+      if (this.stompClient) {
+        this.stompClient.deactivate();
+      }
+
       this.stompClient = new Client({
         brokerURL: `ws://localhost:8080/ws`,
         connectHeaders: {
@@ -157,7 +171,7 @@ export default {
         >
           <p>{{ message.content }}</p>
           <span class="time_date">
-            {{ new Date().toLocaleTimeString() }} | Today
+            {{ message.createTime }}
           </span>
         </div>
       </div>

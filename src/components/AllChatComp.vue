@@ -156,7 +156,7 @@ export default {
             >
               <p>{{ message.content }}</p>
               <span class="time_date">
-                {{ new Date().toLocaleTimeString() }} | Today
+                {{ message.createTime }}
               </span>
             </div>
           </div>
