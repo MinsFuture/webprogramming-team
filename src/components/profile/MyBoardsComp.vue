@@ -5,70 +5,168 @@ export default {
   name: "MyBoardsComp",
   data() {
     return {
-      ProgramAllReadResponse : [],
-      RecruitmentMembers : [],
-    }
+      ProgramAllReadResponse: [],
+      RecruitmentMembers: [],
+    };
   },
-  methods : {
-    routingProgramDetail(id){
-      this.$router.push(`/board/${id}`)
+  methods: {
+    routingProgramDetail(id) {
+      this.$router.push(`/board/${id}`);
     },
-    getRecruitmentMembers(id){
-      axios.get(`${this.$store.state.host}/program/recruitment/members/${id}`, {
-        headers : {
-          "Accesstoken" : this.$store.state.accessToken,
-        }
-      })
-          .then((response) => {
-              this.RecruitmentMembers = response.data.response;
-          })
-          .catch((error) => {
-            console.log('지원자 리스트 불러오기 에러 : ' + error);
-          })
-    }
-
-  },
-  created() {
-    axios.get(`${this.$store.state.host}/program/mine`, {
-      headers : {
-        "Accesstoken" : this.$store.state.accessToken,
-      }
-    })
+    getRecruitmentMembers(id) {
+      axios
+        .get(`${this.$store.state.host}/program/recruitment/members/${id}`, {
+          headers: {
+            Accesstoken: this.$store.state.accessToken,
+          },
+        })
         .then((response) => {
-          this.ProgramAllReadResponse = response.data.response;
+          this.RecruitmentMembers = response.data.response;
         })
         .catch((error) => {
-          console.log("내 프로그램 불러오기 오류 : " + error);
-        })
+          console.log("지원자 리스트 불러오기 에러 : " + error);
+        });
+    },
   },
-
-}
+  created() {
+    axios
+      .get(`${this.$store.state.host}/program/mine`, {
+        headers: {
+          Accesstoken: this.$store.state.accessToken,
+        },
+      })
+      .then((response) => {
+        this.ProgramAllReadResponse = response.data.response;
+        console.log("없어/", this.ProgramAllReadResponse);
+      })
+      .catch((error) => {
+        console.log("내 프로그램 불러오기 오류 : " + error);
+      });
+  },
+};
 </script>
 
 <template>
-  <div class="container">
-    <h1 class="center-content">내가 개최한 프로그램들</h1>
-    <div class="row">
-      <ul class="list-group list-group-flush" v-for="(program, index) in ProgramAllReadResponse" :key="index">
-        <li @click="routingProgramDetail(program.id)" class="list-group-item">
-          <div>{{ program.title }}</div>
-          <div>카테고리: {{ program.category }}</div>
-          <div>글 쓴 날짜: {{ program.writingTime }}</div>
-          <div>모집 상태 : {{program.open}}</div>
-          <img :src="`${program.imageUrl}`" style="width: 100px; height: 100px">
-
-        <!--  <button @click="getRecruitmentMembers(program.id)" class="btn btn-primary"> 프로그램 지원자 보기</button> -->
-        </li>
-      </ul>
+  <h1 class="center-content">내가 개최한 프로그램들</h1>
+  <div class="content">
+    <div class="container">
+      <div
+        @click="routingProgramDetail(program.id)"
+        class="card"
+        v-for="program in ProgramAllReadResponse"
+        :key="program.id"
+      >
+        <img
+          :src="`${program.imageUrl}`"
+          class="card-img-top fixed-size-img"
+          alt="gd"
+        />
+        <div class="card-body">
+          <h5 class="card-title">{{ program.title }}</h5>
+          <h5 class="card-subtitle text-muted small">
+            ⭐ {{ isNaN(program.avgRating) ? "-" : program.avgRating }} ({{
+              program.ratingCnt
+            }})
+          </h5>
+          <br />
+          <p class="card-text">
+            <small class="text-body-secondary">
+              <span
+                :class="{
+                  'badge text-white bg-primary': program.open === 'OPEN',
+                  'badge text-white bg-danger': program.open === 'CLOSED',
+                }"
+              >
+                {{ program.open === "OPEN" ? "모집중" : "모집마감" }}
+              </span>
+            </small>
+            <small class="text-body-secondary">
+              <span class="badge badge-light-custom">
+                {{ program.category }}
+              </span>
+            </small>
+          </p>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
+.main-container {
+  display: flex;
+  margin-top: 2rem;
+}
+
+.sidebar {
+  width: 200px;
+  margin-right: 2rem;
+  background-color: #f8f9fa;
+  padding: 1rem;
+  border-radius: 8px; /* 둥근 모서리 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar li {
+  padding: 10px 15px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+  border-radius: 4px; /* 둥근 모서리 */
+}
+
+.sidebar li:hover {
+  background-color: #e9ecef;
+}
+
+.sidebar li.active {
+  background-color: black;
+  color: white;
+}
+
+.content {
+  flex: 1;
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.card {
+  width: 26rem;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.badge-light-custom {
+  background-color: #f0f0f1;
+  color: #555; /* 글자색 */
+}
+
+.fixed-size-img {
+  width: 100%;
+  height: 130px;
+  object-fit: cover;
+}
+
 .list-group-item {
   padding: 30px;
   cursor: pointer;
 }
+
 .list-group-item:hover {
   background-color: #f0f0f0; /* 변경할 배경 색상 */
   transition: background-color 0.3s ease; /* 부드럽게 변화하도록 transition 추가 */

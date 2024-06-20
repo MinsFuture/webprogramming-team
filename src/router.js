@@ -51,6 +51,7 @@ const routes = [
   {
     path: "/client/chat/:id",
     component: AllChatComp,
+    props: true, // props 설정 추가
   },
   {
     path: "/client/chats/program_private",

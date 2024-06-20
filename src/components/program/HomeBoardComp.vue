@@ -66,7 +66,15 @@ export default {
   data() {
     return {
       selectedCategory: "전체",
-      categories: ["전체", "SPORTS", "COMPUTER", "ART"],
+      categories: [
+        "전체",
+        "SPORTS",
+        "COMPUTER",
+        "ART",
+        "MUSIC",
+        "COOKING",
+        "ETC",
+      ],
       categoryNames: {
         전체: "ALL",
         SPORTS: "SPORTS",
@@ -98,7 +106,10 @@ export default {
         전체: "전체",
         SPORTS: "스포츠",
         COMPUTER: "컴퓨터",
-        ART: "예술",
+        ART: "미술",
+        MUSIC: "음악",
+        COOKING: "요리",
+        ETC: "기타",
       }[category];
     },
   },

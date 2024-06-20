@@ -14,6 +14,24 @@
             >
               {{ programIdReadResponse.category }}
             </a>
+            <div class="mt-3">
+              <button
+                v-if="checkIsMyProgram"
+                @click="deleteProgram"
+                type="button"
+                class="btn btn-danger"
+              >
+                삭제
+              </button>
+              <button
+                v-if="checkIsMyProgram"
+                @click="routingUpdateComp"
+                type="button"
+                class="btn btn-primary"
+              >
+                수정
+              </button>
+            </div>
           </header>
           <div
             id="programCarousel"
@@ -64,10 +82,33 @@
             <p class="fs-5 mb-4">{{ programIdReadResponse.content }}</p>
           </section>
         </article>
+        <h2>
+          <a
+            class="badge rounded-pill text-bg-warning text-decoration-none link-light"
+            href="#!"
+            style="float: right"
+          >
+            리뷰
+          </a>
+        </h2>
         <!-- 댓글 폼 및 댓글 목록 -->
         <section class="comments mb-5">
           <!-- 댓글 폼 -->
           <form @submit.prevent="submitComment">
+            <!-- 별점 입력 -->
+            <div class="mb-3">
+              <label class="form-label">별점</label>
+              <br />
+              <span
+                v-for="index in 5"
+                :key="index"
+                @click="setRating(index)"
+                class="big"
+              >
+                <span v-if="index <= commentDto.rating">⭐</span>
+                <span v-else>☆</span>
+              </span>
+            </div>
             <!-- 제목 입력 -->
             <div class="mb-3">
               <label for="commentTitle" class="form-label">제목</label>
@@ -90,17 +131,13 @@
                 required
               ></textarea>
             </div>
-            <!-- 별점 입력 -->
-            <div class="mb-3">
-              <label class="form-label">Rating</label>
-              <br />
-              <span v-for="index in 5" :key="index" @click="setRating(index)">
-                <span v-if="index <= commentDto.rating">⭐</span>
-                <span v-else>☆</span>
-              </span>
-            </div>
+
             <!-- 댓글 작성 버튼 -->
-            <button type="submit" class="btn btn-primary">댓글 작성</button>
+            <button type="submit" class="btn btn-primary" style="float: right">
+              댓글 작성
+            </button>
+            <br />
+            <br />
           </form>
           <!-- 댓글 목록 -->
           <div
@@ -108,8 +145,16 @@
             :key="review.reviewId"
             class="mt-4 border rounded p-3"
           >
+            <a
+              class="badge rounded-pill text-bg-warning text-decoration-none link-light"
+              href="#!"
+              style="float: right"
+            >
+              리뷰
+            </a>
             <div class="d-flex justify-content-between">
-              <p class="fw-bold">{{ review.title }}</p>
+              <h5 class="fw-bold">{{ review.title }}</h5>
+
               <div class="d-flex">
                 <span
                   v-for="index in 5"
@@ -125,13 +170,17 @@
                 <button
                   @click="deleteReview(review.reviewId)"
                   class="btn btn-danger"
+                  v-if="review.senderEmail === this.$store.state.loginedEmail"
                 >
                   삭제
                 </button>
               </div>
             </div>
-            <small class="text-muted">{{ review.date }}</small>
+            <small class="text-muted">{{ review.senderEmail }}</small
+            ><br />
+
             <p>{{ review.content }}</p>
+            <small class="text-muted">{{ review.date }}</small>
           </div>
         </section>
       </div>
@@ -145,6 +194,8 @@
           </p>
           <h4 class="fw-bolder">프로그램 시작 날짜</h4>
           <p class="fs-5">{{ programIdReadResponse.programDate }}</p>
+          <h4 class="fw-bolder">프로그램 장소</h4>
+          <p class="fs-5">{{ programIdReadResponse.programAddress }}</p>
           <h4 class="fw-bolder">현재 모집인원</h4>
           <p class="fs-5">
             {{ programIdReadResponse.recruitment }}/{{
@@ -161,30 +212,11 @@
           </button>
           <button
             type="button"
-            class="btn btn-primary"
+            class="btn btn-dark"
             @click="routingAllChatComp"
           >
             채팅하기
           </button>
-          <!-- 삭제 및 수정 버튼 -->
-          <div class="mt-3">
-            <button
-              v-if="checkIsMyProgram"
-              @click="deleteProgram"
-              type="button"
-              class="btn btn-danger"
-            >
-              삭제
-            </button>
-            <button
-              v-if="checkIsMyProgram"
-              @click="routingUpdateComp"
-              type="button"
-              class="btn btn-primary"
-            >
-              수정
-            </button>
-          </div>
         </div>
       </div>
     </div>
@@ -213,6 +245,7 @@ export default {
         maximum: "",
         recruitmentStartDate: "",
         recruitmentEndDate: "",
+        programAddress: "",
         programDate: "",
         open: "",
         recruitment: 0,
@@ -301,7 +334,7 @@ export default {
         })
         .then(() => {
           alert("글을 삭제하였습니다");
-          window.location.href = '/'
+          window.location.href = "/";
         })
         .catch((error) => {
           alert("글 삭제 중 에러가 발생하였습니다");
@@ -328,9 +361,10 @@ export default {
         });
     },
     routingAllChatComp() {
-      this.$router.push(
-        `/client/chat/${this.programIdReadResponse.publicChannelId}`
-      );
+      this.$router.push({
+        path: `/client/chat/${this.programIdReadResponse.publicChannelId}`,
+        props: { programData: this.programIdReadResponse },
+      });
     },
   },
   created() {
@@ -351,6 +385,13 @@ export default {
 </script>
 
 <style scoped>
+.mt-3 {
+  float: right;
+}
+.mt-3 .btn {
+  font-size: 12px;
+  margin-bottom: 10px;
+}
 .star-rating {
   unicode-bidi: bidi-override;
   direction: rtl;
@@ -388,5 +429,8 @@ export default {
 .carousel-inner img {
   max-width: 80%;
   height: auto;
+}
+.big {
+  font-size: 3em;
 }
 </style>

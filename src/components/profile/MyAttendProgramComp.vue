@@ -45,7 +45,7 @@ export default {
       })
       .then((response) => {
         this.memberProgramRecruitmentResponse = response.data.response;
-        console.log(this.memberProgramRecruitmentResponse);
+        console.log("왜 안됨", this.memberProgramRecruitmentResponse);
       })
       .catch((error) => {
         console.log("내 프로그램 불러오기 오류 : " + error);
@@ -75,11 +75,10 @@ export default {
           <div>카테고리: {{ program.category }}</div>
           <div>프로그램 날짜: {{ program.programDate }}</div>
           <div class="button-container">
-          <button @click="cancel(program.programId)" class="btn btn-danger">
-            취소
-          </button>
+            <button @click="cancel(program.programId)" class="btn btn-danger">
+              취소
+            </button>
           </div>
-
         </li>
       </ul>
     </div>

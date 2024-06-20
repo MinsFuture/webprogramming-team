@@ -17,6 +17,7 @@ export default {
       content: "",
       stompClient: null,
       connectionStatus: "",
+      people: [],
     };
   },
   created() {
@@ -33,7 +34,9 @@ export default {
     initializeComponent() {
       this.getSubscription().then(() => {
         this.getAllMessages().then(() => {
-          this.connectWebSocket();
+          this.getAllPeople().then(() => {
+            this.connectWebSocket();
+          });
         });
       });
     },
@@ -82,13 +85,33 @@ export default {
         });
     },
 
+    getAllPeople() {
+      return axios
+        .get(
+          `${this.$store.state.host}/member-channel-subscription/channel/${this.channelId}`,
+          {
+            headers: {
+              Accesstoken: this.$store.state.accessToken,
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((response) => {
+          this.people = response.data.response;
+          console.log("사람들: ", this.people);
+        })
+        .catch((error) => {
+          console.log("메시지 불러오기 오류 : " + error);
+        });
+    },
+
     connectWebSocket() {
       if (this.stompClient) {
         this.stompClient.deactivate();
       }
 
       this.stompClient = new Client({
-        brokerURL: `ws://35.216.104.192:8080/ws`,
+        brokerURL: `${this.$store.state.ws}/ws`,
         connectHeaders: {
           Accesstoken: `Bearer ${this.$store.state.accessToken}`,
         },
@@ -156,6 +179,23 @@ export default {
 
 <template>
   <div class="mesgs">
+    <div class="btn-group dropstart" style="float: right">
+      <button
+        type="button"
+        class="btn btn-secondary dropdown-toggle"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        <i class="bi bi-people-fill"></i>
+      </button>
+      <ul class="dropdown-menu">
+        <li v-for="(person, index) in people" :key="index">
+          <a class="dropdown-item"
+            ><i class="bi bi-person-circle">{{}}</i> {{ person }}</a
+          >
+        </li>
+      </ul>
+    </div>
     <div class="msg_history">
       <div
         v-for="(message, index) in messages"
@@ -173,7 +213,7 @@ export default {
           <img
             src="https://ptetutorials.com/images/user-profile.png"
             alt="user"
-          />{{ message.senderEmail }}
+          />{{ message.senderName }}
         </div>
         <div
           :class="

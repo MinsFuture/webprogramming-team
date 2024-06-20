@@ -197,9 +197,12 @@ export default {
           aria-label="select example"
         >
           <option value="">카테고리를 선택하세요</option>
-          <option value="SPORTS">SPORTS</option>
-          <option value="COMPUTER">COMPUTER</option>
-          <option value="ART">ART</option>
+          <option value="SPORTS">스포츠</option>
+          <option value="COMPUTER">컴퓨터</option>
+          <option value="ART">미술</option>
+          <option value="COOKING">요리</option>
+          <option value="MUSIC">음악</option>
+          <option value="ETC">기타</option>
         </select>
         <div class="invalid-feedback">카테고리를 선택해주세요</div>
       </div>
