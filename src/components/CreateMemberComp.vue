@@ -197,7 +197,7 @@ export default {
           )
           .then(() => {
             alert("회원 가입 성공!");
-            this.$router.push("/");
+            this.$router.push("/login");
           })
           .catch((error) => {
             console.log("회원 가입 실패" + error);
