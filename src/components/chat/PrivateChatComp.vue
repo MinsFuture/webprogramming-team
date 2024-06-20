@@ -179,6 +179,23 @@ export default {
 
 <template>
   <div class="mesgs">
+    <div class="btn-group dropstart" style="float: right">
+      <button
+        type="button"
+        class="btn btn-secondary dropdown-toggle"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        <i class="bi bi-people-fill"></i>
+      </button>
+      <ul class="dropdown-menu">
+        <li v-for="(person, index) in people" :key="index">
+          <a class="dropdown-item"
+            ><i class="bi bi-person-circle">{{}}</i> {{ person }}</a
+          >
+        </li>
+      </ul>
+    </div>
     <div class="msg_history">
       <div
         v-for="(message, index) in messages"
