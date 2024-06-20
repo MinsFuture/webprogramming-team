@@ -62,7 +62,7 @@ export default {
         }
 
         axios
-          .post("http://localhost:8080/program", formData, {
+          .post(`${this.$store.state.host}/program`, formData, {
             headers: {
               "Content-Type": "multipart/form-data",
               Accesstoken: this.$store.state.accessToken,
@@ -284,20 +284,6 @@ export default {
       </div>
     </form>
     <div id="daumPostcode" style="display: none"></div>
-
-    <!-- 정렬 옵션 추가 -->
-    <div class="sort-options">
-      <label>정렬:</label>
-      <select v-model="selectedSort" @change="selectSort(selectedSort)">
-        <option
-          v-for="option in sortOptions"
-          :key="option.value"
-          :value="option.value"
-        >
-          {{ option.text }}
-        </option>
-      </select>
-    </div>
   </div>
 </template>
 <style scoped>

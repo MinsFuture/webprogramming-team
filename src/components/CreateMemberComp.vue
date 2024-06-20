@@ -187,7 +187,7 @@ export default {
         console.log(this.form);
         axios
           .post(
-            "http://localhost:8080/member/signup",
+            `${this.$store.state.host}/member/signup`,
             JSON.stringify(this.form),
             {
               headers: {
@@ -210,7 +210,7 @@ export default {
     sendEmailVerificationCode() {
       axios
         .post(
-          "http://localhost:8080/email/mailsend",
+          `${this.$store.state.host}/email/mailsend`,
           { email: this.form.email },
           {
             headers: {
@@ -229,7 +229,7 @@ export default {
     verifyEmailCode() {
       axios
         .post(
-          "http://localhost:8080/email/mailAuthCheck",
+          `${this.$store.state.host}/email/mailAuthCheck`,
           {
             email: this.form.email,
             authNum: this.emailCode,

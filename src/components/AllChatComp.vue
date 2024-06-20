@@ -69,6 +69,7 @@ export default {
 
     connectWebSocket() {
       this.stompClient = new Client({
+        // 35.216.104.192
         brokerURL: `ws://localhost:8080/ws`,
         connectHeaders: {
           Accesstoken: `Bearer ${this.$store.state.accessToken}`,

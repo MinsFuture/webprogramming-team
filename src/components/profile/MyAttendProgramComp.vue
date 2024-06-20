@@ -74,9 +74,12 @@ export default {
           <div>{{ program.title }}</div>
           <div>카테고리: {{ program.category }}</div>
           <div>프로그램 날짜: {{ program.programDate }}</div>
+          <div class="button-container">
           <button @click="cancel(program.programId)" class="btn btn-danger">
             취소
           </button>
+          </div>
+
         </li>
       </ul>
     </div>
@@ -87,9 +90,18 @@ export default {
 .list-group-item {
   padding: 30px;
   cursor: pointer;
+  position: relative; /* 상대적 위치 설정 */
 }
+
 .list-group-item:hover {
   background-color: #f0f0f0; /* 변경할 배경 색상 */
   transition: background-color 0.3s ease; /* 부드럽게 변화하도록 transition 추가 */
+}
+
+.button-container {
+  position: absolute; /* 절대 위치 설정 */
+  right: 20px; /* 오른쪽 여백 */
+  top: 50%; /* 세로 중앙 정렬 */
+  transform: translateY(-50%); /* 세로 중앙 정렬 보정 */
 }
 </style>

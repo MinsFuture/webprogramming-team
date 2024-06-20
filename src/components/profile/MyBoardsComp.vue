@@ -57,7 +57,7 @@ export default {
           <div>모집 상태 : {{program.open}}</div>
           <img :src="`${program.imageUrl}`" style="width: 100px; height: 100px">
 
-          <button @click="getRecruitmentMembers(program.id)" class="btn btn-primary"> 프로그램 지원자 보기</button>
+        <!--  <button @click="getRecruitmentMembers(program.id)" class="btn btn-primary"> 프로그램 지원자 보기</button> -->
         </li>
       </ul>
     </div>

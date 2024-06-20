@@ -8,6 +8,7 @@ const store = createStore({
             accessToken : '',
             isLogin : false,
             loginedEmail : '',
+            // 35.216.104.192
             host : 'http://localhost:8080',
         }
     },

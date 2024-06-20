@@ -31,7 +31,7 @@ export default {
         "Subscribed to notifications: " + this.$store.state.accessToken
       );
       const eventSource = new EventSourcePolyfill(
-        `http://localhost:8080/notification/subscribe`,
+        `${this.$store.state.host}/notification/subscribe`,
         { headers: { Accesstoken: this.$store.state.accessToken } }
       );
       eventSource.onmessage = (event) => {

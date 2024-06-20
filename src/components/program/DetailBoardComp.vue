@@ -294,14 +294,14 @@ export default {
       let id = this.$route.params.id;
 
       axios
-        .delete(`http://localhost:8080/program/${id}`, {
+        .delete(`${this.$store.state.host}/program/${id}`, {
           headers: {
             Accesstoken: this.$store.state.accessToken,
           },
         })
         .then(() => {
           alert("글을 삭제하였습니다");
-          this.$router.push("/");
+          window.location.href = '/'
         })
         .catch((error) => {
           alert("글 삭제 중 에러가 발생하였습니다");
@@ -320,6 +320,7 @@ export default {
         .then((response) => {
           this.nowProgramRecruit = response.data.response;
           alert("프로그램을 신청하셨습니다");
+          this.$router.go(0);
         })
         .catch((error) => {
           console.log("프로그램 신청 에러 : " + error);
@@ -337,7 +338,7 @@ export default {
 
     let id = this.$route.params.id;
     axios
-      .get(`http://localhost:8080/program/view/${id}`)
+      .get(`${this.$store.state.host}/program/view/${id}`)
       .then((response) => {
         this.programIdReadResponse = response.data.response;
         console.log(this.programIdReadResponse);

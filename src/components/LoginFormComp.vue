@@ -68,7 +68,7 @@ export default {
     },
     login() {
       axios
-        .post("http://localhost:8080/login", JSON.stringify(this.form), {
+        .post(`${this.$store.state.host}/login`, JSON.stringify(this.form), {
           headers: {
             "Content-Type": "application/json",
           },

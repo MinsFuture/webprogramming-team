@@ -14,10 +14,10 @@ export default {
         recruitmentStartDate: '',
         recruitmentEndDate: '',
         programDate: '',
-        open : 'OPEN',
-        programAddress : '',
-        longitude : '',
-        latitude : '',
+        open: 'OPEN',
+        programAddress: '',
+        longitude: '',
+        latitude: '',
       },
       files: [],
       isFormValid: false,
@@ -38,22 +38,23 @@ export default {
         let id = this.$route.params.id;
         let formData = new FormData();
 
-        formData.append('ProgramUpdateRequest', new Blob([JSON.stringify(this.ProgramUpdateRequest)], { type: "application/json" }));
+        formData.append('ProgramUpdateRequest', new Blob([JSON.stringify(this.ProgramUpdateRequest)], {type: "application/json"}));
         for (let i = 0; i < this.files.length; i++) {
           formData.append("images", this.files[i]);
         }
 
         axios
-            .put(`http://localhost:8080/program/${id}`, formData, {
+            .put(`${this.$store.state.host}/program/${id}`, formData, {
               headers: {
                 "Content-Type": "multipart/form-data",
-                "Accesstoken" : this.$store.state.accessToken,
+                "Accesstoken": this.$store.state.accessToken,
               }
             })
             .then((response) => {
               console.log(response);
               alert("글 수정에 성공하였습니다");
-              this.$router.push(`/board/${response.data.response}`);            })
+              this.$router.push(`/board/${response.data.response}`);
+            })
             .catch((error) => {
               console.error(error);
               alert("글 수정에 실패하였습니다");
@@ -107,7 +108,7 @@ export default {
       axios
           .get(
               `https://dapi.kakao.com/v2/local/search/address.json?query=${this.ProgramUpdateRequest.programAddress}`,
-              { headers }
+              {headers}
           )
           .then((response) => {
             if (response.data.documents.length > 0) {
@@ -123,6 +124,21 @@ export default {
           });
     },
   },
+
+  created() {
+    let id = this.$route.params.id;
+
+    axios
+        .get(`${this.$store.state.host}/program/view/${id}`)
+        .then((response) => {
+          this.ProgramUpdateRequest = response.data.response;
+          console.log(this.ProgramUpdateRequest);
+        })
+        .catch((error) => {
+          console.log("Get 에러 " + error);
+        });
+  },
+
   mounted() {
     // 다음 주소 검색 API 스크립트 동적 로드
     const script = document.createElement("script");
