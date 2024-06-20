@@ -84,22 +84,28 @@
     <div class="center-content">
       <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
-          <form class="d-flex" role="search" style="margin-bottom: 15px">
+          <form
+            class="d-flex"
+            role="search"
+            @submit.prevent="searchPrograms"
+            style="margin-bottom: 15px"
+          >
             <input
+              v-model="searchTitle"
               class="form-control me-2"
               type="search"
               placeholder="검색어를 입력하세요"
               aria-label="Search"
               style="width: 500px"
             />
+            <button
+              class="btn btn-outline-success"
+              type="submit"
+              style="width: 100px"
+            >
+              검색
+            </button>
           </form>
-          <button
-            class="btn btn-outline-success"
-            type="submit"
-            style="width: 100px"
-          >
-            검색
-          </button>
         </div>
       </nav>
     </div>
@@ -153,6 +159,7 @@ export default {
       programAllReadResponse: [],
       isRecentSorted: false,
       isOpenLists: false,
+      searchTitle: "",
     };
   },
   methods: {
@@ -186,6 +193,20 @@ export default {
         })
         .catch((error) => {
           console.log("홈 화면 불러오기 오류 : " + error);
+        });
+    },
+    searchPrograms() {
+      axios
+        .post(`${this.$store.state.host}/program/search`, {
+          searchTitle: this.searchTitle,
+        })
+        .then((response) => {
+          this.programAllReadResponse = response.data.response;
+          this.isRecentSorted = true;
+          this.isOpenLists = false;
+        })
+        .catch((error) => {
+          console.log("검색 결과 불러오기 오류 : " + error);
         });
     },
 
