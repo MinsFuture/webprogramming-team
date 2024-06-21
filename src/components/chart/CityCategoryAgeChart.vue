@@ -45,7 +45,7 @@ export default {
       selectedCity: "서울",
       selectedCategory: "COMPUTER",
       cities: ["서울", "부산", "대구"],
-      categories: ["SPORTS", "COMPUTER", "ART"],
+      categories: ["SPORTS", "COMPUTER", "ART", "COOKING", "MUSIC", "ETC"],
       statisticData: null,
       pieChart: null,
     };

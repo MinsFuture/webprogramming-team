@@ -10,7 +10,7 @@ import UpdateBoardComp from "@/components/program/UpdateBoardComp.vue";
 import Chart from "@/components/chart/ChartSelector.vue";
 import AllChatComp from "@/components/AllChatComp.vue";
 import ProgramPrivateChatComp from "@/components/chat/ProgramPrivateChatComp.vue";
-
+import MembersPrograms from "@/components/program/MembersPrograms.vue";
 const routes = [
   {
     path: "/boards/me",
@@ -56,6 +56,10 @@ const routes = [
   {
     path: "/client/chats/program_private",
     component: ProgramPrivateChatComp,
+  },
+  {
+    path: "/board/programs/:email",
+    component: MembersPrograms,
   },
 ];
 

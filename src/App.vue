@@ -1,7 +1,11 @@
 <template>
-  <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
+  <nav
+    class="navbar navbar-expand-lg"
+    style="background-color: #ffdc9f"
+    data-bs-theme="dark"
+  >
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">기부천사</a>
+      <img :src="require('@/logo3.png')" width="230px" href="/" />
       <button
         class="navbar-toggler"
         type="button"
@@ -13,42 +17,74 @@
       >
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <div class="collapse navbar-collapse click" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/">프로그램</a>
+            <router-link
+              to="/"
+              class="nav-link"
+              active-class="active"
+              style="color: #8b572a"
+              >프로그램</router-link
+            >
           </li>
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/chart"
-              >전국 프로그램 현황</a
+            <router-link
+              to="/chart"
+              class="nav-link"
+              active-class="active"
+              style="color: #8b572a"
+              >전국 프로그램 현황</router-link
             >
           </li>
         </ul>
 
         <div class="icon-group ms-auto">
           <i
-            class="bi bi-chat-fill text-white"
+            class="bi bi-chat-fill"
             @click="routingProgramPrivateChatComp"
+            style="color: rgba(139, 87, 42, 0.9)"
           ></i>
           <div v-if="this.$store.state.isLogin" class="dropdown-center">
             <i
-              class="bi bi-person-circle text-white dropdown-toggle"
+              class="bi bi-person-circle dropdown-toggle"
               data-bs-toggle="dropdown"
               aria-expanded="false"
+              style="color: rgba(139, 87, 42, 0.9)"
             ></i>
-            <ul class="dropdown-menu">
+            <ul
+              class="dropdown-menu"
+              style="background-color: rgba(139, 87, 42, 0.9)"
+            >
               <li>
-                <a class="dropdown-item" @click="routingMyBoards">내가 쓴 글</a>
+                <a
+                  class="dropdown-item"
+                  @click="routingMyBoards"
+                  style="color: white"
+                  >내가 쓴 글</a
+                >
               </li>
               <li>
-                <a class="dropdown-item" @click="routingMyAttendPrograms"
+                <a
+                  class="dropdown-item"
+                  @click="routingMyAttendPrograms"
+                  style="color: white"
                   >내가 신청한 프로그램</a
                 >
               </li>
               <li>
-                <a class="dropdown-item" @click="routingMyRanksComp">내 등급</a>
+                <a
+                  class="dropdown-item"
+                  @click="routingMyRanksComp"
+                  style="color: white"
+                  >내 등급</a
+                >
               </li>
-              <li><a class="dropdown-item" @click="logout">로그아웃</a></li>
+              <li>
+                <a class="dropdown-item" @click="logout" style="color: white"
+                  >로그아웃</a
+                >
+              </li>
             </ul>
           </div>
         </div>
@@ -72,7 +108,8 @@
           v-else
           type="button"
           @click="routingCreateBoardComp"
-          class="btn btn-light"
+          class="btn"
+          style="background-color: rgba(139, 87, 42, 0.9); color: white"
         >
           글쓰기
         </button>
@@ -82,13 +119,16 @@
 
   <div v-if="this.$route.path === '/'">
     <div class="center-content">
-      <nav class="navbar navbar-expand-lg bg-body-tertiary">
-        <div class="container-fluid">
+      <nav
+        class="navbar navbar-expand-lg bg-body-tertiary"
+        style="background-color: white"
+      >
+        <div class="container-fluid" style="background-color: white">
           <form
             class="d-flex"
             role="search"
             @submit.prevent="searchPrograms"
-            style="margin-bottom: 15px"
+            style="margin-bottom: 15px; background-color: white"
           >
             <input
               v-model="searchTitle"
@@ -96,12 +136,12 @@
               type="search"
               placeholder="검색어를 입력하세요"
               aria-label="Search"
-              style="width: 500px"
+              style="width: 500px; border-color: #8b572a"
             />
             <button
-              class="btn btn-outline-success"
+              class="btn"
               type="submit"
-              style="width: 100px"
+              style="width: 100px; color: #8b572a"
             >
               검색
             </button>
@@ -273,7 +313,30 @@ export default {
 
 .navbar {
   margin-bottom: 1rem; /* navbar 아래에 1rem 간격 추가 */
-  background-color: #e3f2fd;
+  background-color: #ffffff;
+  font-size: large;
+}
+
+.nav-link:hover {
+  background-color: rgba(139, 87, 42, 0.2);
+}
+
+.navbar-nav .nav-link {
+  color: #8b572a;
+}
+
+.navbar-nav .nav-link:hover {
+  background-color: rgba(139, 87, 42, 0.2);
+}
+
+.navbar-nav .nav-link.active {
+  font-weight: bold;
+
+  color: rgb(83, 52, 26);
+}
+.nav-link.active {
+  /* 배경색 변경 */
+  color: rgba(139, 87, 42, 1); /* 글꼴 색상 변경 */
 }
 
 .center-content {
@@ -283,6 +346,7 @@ export default {
   align-items: center;
   height: calc(20vh - 2rem); /* 뷰포트 높이에서 상하 1rem씩 뺀 값으로 설정 */
   text-align: center; /* 텍스트를 가로로 중앙 정렬 */
+  background-color: #ffffff;
 }
 
 .center-content form {
