@@ -10,6 +10,8 @@ import UpdateBoardComp from "@/components/program/UpdateBoardComp.vue";
 import Chart from "@/components/chart/ChartSelector.vue";
 import AllChatComp from "@/components/AllChatComp.vue";
 import ProgramPrivateChatComp from "@/components/chat/ProgramPrivateChatComp.vue";
+import KakaoMapComp from "@/components/KakaoMapComp.vue";
+import MembersPrograms from "@/components/program/MembersPrograms.vue";
 
 const routes = [
   {
@@ -51,10 +53,19 @@ const routes = [
   {
     path: "/client/chat/:id",
     component: AllChatComp,
+    props: true, // props 설정 추가
   },
   {
     path: "/client/chats/program_private",
     component: ProgramPrivateChatComp,
+  },
+  {
+    path: "/nearby",
+    component: KakaoMapComp,
+  },
+  {
+    path: "/board/programs/:email",
+    component: MembersPrograms,
   },
 ];
 

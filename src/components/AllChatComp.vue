@@ -7,6 +7,12 @@ import { Client } from "@stomp/stompjs";
 export default {
   name: "AllChatComp",
   components: {},
+  props: {
+    programData: {
+      type: Object,
+      required: true,
+    },
+  },
   data() {
     return {
       AddSubscriptionRequest: {
@@ -18,34 +24,12 @@ export default {
     };
   },
   created() {
-    this.getSubscription().then(() => {
-      this.getAllMessages().then(() => {
-        this.connectWebSocket();
-      });
+    console.log(this.programData);
+    this.getAllMessages().then(() => {
+      this.connectWebSocket();
     });
   },
   methods: {
-    getSubscription() {
-      return axios
-        .post(
-          `${this.$store.state.host}/member-channel-subscription`,
-          JSON.stringify(this.AddSubscriptionRequest),
-          {
-            headers: {
-              Accesstoken: this.$store.state.accessToken,
-              "Content-Type": "application/json",
-            },
-          }
-        )
-        .then((response) => {
-          console.log("구독 성공 : " + response.data.response);
-          // 메시지 불러오기
-        })
-        .catch((error) => {
-          console.log("구독 실패 : " + error);
-        });
-    },
-
     getAllMessages() {
       return axios
         .get(
@@ -61,6 +45,9 @@ export default {
           this.messages = response.data.response;
           console.log(this.messages);
           console.log(this.$store.state.loginedEmail);
+          this.$nextTick(() => {
+            this.scrollToBottom();
+          });
         })
         .catch((error) => {
           console.log("메시지 불러오기 오류 : " + error);
@@ -68,9 +55,12 @@ export default {
     },
 
     connectWebSocket() {
+      if (this.stompClient) {
+        this.stompClient.deactivate();
+      }
       this.stompClient = new Client({
         // 35.216.104.192
-        brokerURL: `ws://localhost:8080/ws`,
+        brokerURL: `${this.$store.state.ws}/ws`,
         connectHeaders: {
           Accesstoken: `Bearer ${this.$store.state.accessToken}`,
         },
@@ -82,6 +72,9 @@ export default {
               try {
                 const parsedMessage = JSON.parse(message.body);
                 this.messages.push(parsedMessage);
+                this.$nextTick(() => {
+                  this.scrollToBottom();
+                });
               } catch (e) {
                 console.error("메시지 파싱 오류:", e);
               }
@@ -120,6 +113,13 @@ export default {
         headers: headers,
       });
       this.content = "";
+      this.$nextTick(() => {
+        this.scrollToBottom();
+      });
+    },
+    scrollToBottom() {
+      const container = this.$el.querySelector(".msg_history");
+      container.scrollTop = container.scrollHeight;
     },
   },
 };
@@ -128,51 +128,53 @@ export default {
 <template>
   <div class="container">
     <div class="messaging">
-      <div class="mesgs">
-        <div class="msg_history">
-          <div
-            v-for="(message, index) in messages"
-            :key="index"
-            :class="
-              message.senderEmail === this.$store.state.loginedEmail
-                ? 'outgoing_msg'
-                : 'incoming_msg'
-            "
-          >
+      <div class="inbox_msg">
+        <div class="mesgs">
+          <div class="msg_history">
             <div
-              v-if="message.senderEmail !== this.$store.state.loginedEmail"
-              class="incoming_msg_img"
-            >
-              <img
-                src="https://ptetutorials.com/images/user-profile.png"
-                alt="user"
-              />{{ message.senderEmail }}
-            </div>
-            <div
+              v-for="(message, index) in messages"
+              :key="index"
               :class="
                 message.senderEmail === this.$store.state.loginedEmail
-                  ? 'sent_msg'
-                  : 'received_withd_msg'
+                  ? 'outgoing_msg'
+                  : 'incoming_msg'
               "
             >
-              <p>{{ message.content }}</p>
-              <span class="time_date">
-                {{ message.createTime }}
-              </span>
+              <div
+                v-if="message.senderEmail !== this.$store.state.loginedEmail"
+                class="incoming_msg_img"
+              >
+                <img
+                  src="https://ptetutorials.com/images/user-profile.png"
+                  alt="user"
+                />{{ message.senderName }}
+              </div>
+              <div
+                :class="
+                  message.senderEmail === this.$store.state.loginedEmail
+                    ? 'sent_msg'
+                    : 'received_withd_msg'
+                "
+              >
+                <p>{{ message.content }}</p>
+                <span class="time_date">
+                  {{ message.createTime }}
+                </span>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="type_msg">
-          <div class="input_msg_write">
-            <input
-              type="text"
-              v-model="content"
-              class="write_msg"
-              placeholder="Type a message"
-            />
-            <button @click="sendMessage" class="msg_send_btn" type="button">
-              <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
-            </button>
+          <div class="type_msg">
+            <div class="input_msg_write">
+              <input
+                type="text"
+                v-model="content"
+                class="write_msg"
+                placeholder="Type a message"
+              />
+              <button @click="sendMessage" class="msg_send_btn" type="button">
+                <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -190,6 +192,11 @@ export default {
   height: 100vh; /* 수직 중앙 정렬 */
 }
 
+.inbox_msg {
+  border: 1px solid #c4c4c4;
+  clear: both;
+  overflow: hidden;
+}
 img {
   max-width: 40%;
 }
@@ -198,7 +205,7 @@ img {
   float: none; /* 플로팅 해제 */
   padding: 30px 15px 0 25px;
   width: 500px;
-  margin: 0 auto; /* 수평 중앙 정렬 */
+  margin: auto; /* 수평 중앙 정렬 */
 }
 
 .inbox_people {

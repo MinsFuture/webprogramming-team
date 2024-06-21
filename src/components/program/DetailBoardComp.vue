@@ -14,6 +14,24 @@
             >
               {{ programIdReadResponse.category }}
             </a>
+            <div class="mt-3">
+              <button
+                v-if="checkIsMyProgram"
+                @click="deleteProgram"
+                type="button"
+                class="btn btn-danger"
+              >
+                삭제
+              </button>
+              <button
+                v-if="checkIsMyProgram"
+                @click="routingUpdateComp"
+                type="button"
+                class="btn btn-primary"
+              >
+                수정
+              </button>
+            </div>
           </header>
           <div
             id="programCarousel"
@@ -64,10 +82,39 @@
             <p class="fs-5 mb-4">{{ programIdReadResponse.content }}</p>
           </section>
         </article>
+
         <!-- 댓글 폼 및 댓글 목록 -->
         <section class="comments mb-5">
+          <h2>
+            <a
+              class="badge text-bg-warning text-decoration-none link-light"
+              href="#!"
+            >
+              리뷰
+            </a>
+            ⭐
+            {{
+              programIdReadResponse.avgRating === "NaN"
+                ? "-"
+                : programIdReadResponse.avgRating
+            }}
+          </h2>
           <!-- 댓글 폼 -->
           <form @submit.prevent="submitComment">
+            <!-- 별점 입력 -->
+            <div class="mb-3">
+              <label class="form-label">별점</label>
+              <br />
+              <span
+                v-for="index in 5"
+                :key="index"
+                @click="setRating(index)"
+                class="big"
+              >
+                <span v-if="index <= commentDto.rating">⭐</span>
+                <span v-else>☆</span>
+              </span>
+            </div>
             <!-- 제목 입력 -->
             <div class="mb-3">
               <label for="commentTitle" class="form-label">제목</label>
@@ -90,26 +137,39 @@
                 required
               ></textarea>
             </div>
-            <!-- 별점 입력 -->
-            <div class="mb-3">
-              <label class="form-label">Rating</label>
-              <br />
-              <span v-for="index in 5" :key="index" @click="setRating(index)">
-                <span v-if="index <= commentDto.rating">⭐</span>
-                <span v-else>☆</span>
-              </span>
-            </div>
+
             <!-- 댓글 작성 버튼 -->
-            <button type="submit" class="btn btn-primary">댓글 작성</button>
+            <button
+              type="submit"
+              class="btn"
+              style="
+                float: right;
+                background-color: rgba(139, 87, 42, 0.7);
+                color: white;
+              "
+            >
+              리뷰 등록
+            </button>
+            <br />
+            <br />
           </form>
+
           <!-- 댓글 목록 -->
           <div
             v-for="review in reviewAllReadResponse"
             :key="review.reviewId"
             class="mt-4 border rounded p-3"
           >
+            <a
+              class="badge rounded-pill text-bg-warning text-decoration-none link-light"
+              href="#!"
+              style="float: right"
+            >
+              리뷰
+            </a>
             <div class="d-flex justify-content-between">
-              <p class="fw-bold">{{ review.title }}</p>
+              <h5 class="fw-bold">{{ review.title }}</h5>
+
               <div class="d-flex">
                 <span
                   v-for="index in 5"
@@ -125,19 +185,26 @@
                 <button
                   @click="deleteReview(review.reviewId)"
                   class="btn btn-danger"
+                  v-if="review.senderEmail === this.$store.state.loginedEmail"
                 >
                   삭제
                 </button>
               </div>
             </div>
-            <small class="text-muted">{{ review.date }}</small>
+            <small class="text-muted">{{ review.senderEmail }}</small
+            ><br />
+
             <p>{{ review.content }}</p>
+            <small class="text-muted">{{ review.date }}</small>
           </div>
         </section>
       </div>
       <!-- 사이드 위젯 -->
       <div class="col-lg-4">
-        <div class="side-widget bg-light border rounded p-3">
+        <div
+          class="side-widget border rounded p-3 mb-4"
+          style="background-color: rgba(255, 220, 159, 0.1)"
+        >
           <h4 class="fw-bolder">모집 기간</h4>
           <p class="fs-5">
             {{ programIdReadResponse.recruitmentStartDate }} ~
@@ -145,6 +212,8 @@
           </p>
           <h4 class="fw-bolder">프로그램 시작 날짜</h4>
           <p class="fs-5">{{ programIdReadResponse.programDate }}</p>
+          <h4 class="fw-bolder">프로그램 장소</h4>
+          <p class="fs-5">{{ programIdReadResponse.programAddress }}</p>
           <h4 class="fw-bolder">현재 모집인원</h4>
           <p class="fs-5">
             {{ programIdReadResponse.recruitment }}/{{
@@ -161,30 +230,63 @@
           </button>
           <button
             type="button"
-            class="btn btn-primary"
+            class="btn"
             @click="routingAllChatComp"
+            style="background-color: rgba(139, 87, 42, 0.7); color: white"
           >
             채팅하기
           </button>
-          <!-- 삭제 및 수정 버튼 -->
-          <div class="mt-3">
-            <button
-              v-if="checkIsMyProgram"
-              @click="deleteProgram"
-              type="button"
-              class="btn btn-danger"
+        </div>
+
+        <div
+          class="side-widget2 border rounded p-3"
+          style="
+            max-width: 350px;
+            margin: auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: rgba(255, 220, 159, 0.1);
+          "
+        >
+          <h6 style="text-align: center">
+            <a
+              class="badge text-decoration-none link-light"
+              href="#!"
+              style="
+                font-size: 1.2em;
+                padding: 0.5em 1em;
+                background-color: rgba(139, 87, 42, 0.7);
+              "
             >
-              삭제
-            </button>
-            <button
-              v-if="checkIsMyProgram"
-              @click="routingUpdateComp"
-              type="button"
-              class="btn btn-primary"
-            >
-              수정
-            </button>
+              프로그램 개최자 정보
+            </a>
+          </h6>
+          <div style="text-align: center; margin: 20px 0">
+            <img
+              src="https://ptetutorials.com/images/user-profile.png"
+              alt="user"
+              width="100px"
+              style="border-radius: 50%; border: 2px solid #ddd; padding: 5px"
+            />
           </div>
+          <h2 class="text-muted" style="text-align: center; font-size: 1.5em">
+            {{ programIdReadResponse.memberName }}
+          </h2>
+
+          <h6 class="fw-bolder" style="margin-top: 20px">개최자 연락처</h6>
+          <div class="text-muted" style="margin-bottom: 10px">
+            {{ programIdReadResponse.memberEmail }}
+          </div>
+          <h6 class="fw-bolder">개최자 프로그램 평균 별점</h6>
+          <div class="text-muted">
+            ⭐ {{ programIdReadResponse.memberRating }}
+          </div>
+          <hr />
+          <button
+            style="border: transparent; text-align: center"
+            @click="routingMemberPrograms"
+          >
+            ➡️ {{ programIdReadResponse.memberName }} 의 다른 프로그램 보러가기
+          </button>
         </div>
       </div>
     </div>
@@ -213,6 +315,7 @@ export default {
         maximum: "",
         recruitmentStartDate: "",
         recruitmentEndDate: "",
+        programAddress: "",
         programDate: "",
         open: "",
         recruitment: 0,
@@ -290,6 +393,9 @@ export default {
     routingUpdateComp() {
       this.$router.push(`/board/update/${this.$route.params.id}`);
     },
+    routingMemberPrograms() {
+      this.$router.push(`/programs/${this.programIdReadResponse.memberEmail}`);
+    },
     deleteProgram() {
       let id = this.$route.params.id;
 
@@ -301,7 +407,7 @@ export default {
         })
         .then(() => {
           alert("글을 삭제하였습니다");
-          window.location.href = '/'
+          window.location.href = "/";
         })
         .catch((error) => {
           alert("글 삭제 중 에러가 발생하였습니다");
@@ -328,9 +434,10 @@ export default {
         });
     },
     routingAllChatComp() {
-      this.$router.push(
-        `/client/chat/${this.programIdReadResponse.publicChannelId}`
-      );
+      this.$router.push({
+        path: `/client/chat/${this.programIdReadResponse.publicChannelId}`,
+        props: { programData: this.programIdReadResponse },
+      });
     },
   },
   created() {
@@ -351,6 +458,13 @@ export default {
 </script>
 
 <style scoped>
+.mt-3 {
+  float: right;
+}
+.mt-3 .btn {
+  font-size: 12px;
+  margin-bottom: 10px;
+}
 .star-rating {
   unicode-bidi: bidi-override;
   direction: rtl;
@@ -373,8 +487,14 @@ export default {
   border: 1px solid #ddd;
   padding: 1rem;
   border-radius: 0.5rem;
+  margin-bottom: 20px;
 }
-
+.side-widget2 {
+  width: 500px;
+  border: 1px solid #ddd;
+  padding: 1rem;
+  border-radius: 0.5rem;
+}
 .border-rounded {
   border: 1px solid #ddd;
   border-radius: 0.5rem;
@@ -388,5 +508,8 @@ export default {
 .carousel-inner img {
   max-width: 80%;
   height: auto;
+}
+.big {
+  font-size: 3em;
 }
 </style>

@@ -15,6 +15,8 @@ export default {
         recruitmentEndDate: "",
         programDate: "",
         open: "OPEN",
+        latitude : 0.0,
+        longitude : 0.0,
         programAddress: "",
       },
       files: [],
@@ -39,17 +41,16 @@ export default {
     document.head.appendChild(script);
   },
   methods: {
-    submitForm(event) {
+   submitForm(event) {
       event.preventDefault(); // 기본 제출 동작을 막습니다.
       // 양식 제출 전에 유효성 검사 실행
-      console.log(this.$store.state.accessToken);
       this.checkFormValidity();
-      console.log(this.ProgramSaveRequest);
-      console.log(this.files);
-      console.log(this.$store.state.accessToken);
       // 유효성 검사를 통과한 경우에만 제출
       if (this.isFormValid) {
         let formData = new FormData();
+
+        console.log(this.ProgramSaveRequest.latitude);
+        console.log(this.ProgramSaveRequest.longitude);
 
         formData.append(
           "ProgramSaveRequest",
@@ -125,13 +126,38 @@ export default {
             let roadAddr = data.roadAddress;
             // 변환된 주소를 폼에 적용
             this.ProgramSaveRequest.programAddress = roadAddr;
+            this.getCoordinate();
           },
         }).open();
       } else {
         alert("주소 검색 API 로드에 실패했습니다.");
       }
     },
-    // 모집중 필터 해제 메서드 추가
+
+    getCoordinate() {
+      const headers = {
+        Authorization: `KakaoAK 89812f89e48298b9f8581fa37b3270e7`,
+      };
+
+      axios
+          .get(
+              `https://dapi.kakao.com/v2/local/search/address.json?query=${this.ProgramSaveRequest.programAddress}`,
+              { headers }
+          )
+          .then((response) => {
+            if (response.data.documents.length > 0) {
+              const result = response.data.documents[0];
+              this.ProgramSaveRequest.longitude = result.x;
+              this.ProgramSaveRequest.latitude = result.y;
+            } else {
+              alert("좌표를 찾을 수 없습니다.");
+            }
+          })
+          .catch((error) => {
+            console.error("좌표를 가져오는 중 오류가 발생했습니다:", error);
+          });
+    },
+  // 모집중 필터 해제 메서드 추가
     clearRecruitingFilter() {
       this.isRecruitingFilter = false;
     },
@@ -197,9 +223,12 @@ export default {
           aria-label="select example"
         >
           <option value="">카테고리를 선택하세요</option>
-          <option value="SPORTS">SPORTS</option>
-          <option value="COMPUTER">COMPUTER</option>
-          <option value="ART">ART</option>
+          <option value="SPORTS">스포츠</option>
+          <option value="COMPUTER">컴퓨터</option>
+          <option value="ART">미술</option>
+          <option value="COOKING">요리</option>
+          <option value="MUSIC">음악</option>
+          <option value="ETC">기타</option>
         </select>
         <div class="invalid-feedback">카테고리를 선택해주세요</div>
       </div>
@@ -262,7 +291,6 @@ export default {
           v-model="ProgramSaveRequest.programAddress"
           class="form-control"
           @click="openPostcodePopup"
-          readonly
           required
         />
       </div>

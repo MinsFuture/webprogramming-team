@@ -1,53 +1,7 @@
-<script>
-import axios from "axios";
-
-export default {
-  name: "MyBoardsComp",
-  data() {
-    return {
-      ProgramAllReadResponse: [],
-      RecruitmentMembers: [],
-    };
-  },
-  methods: {
-    routingProgramDetail(id) {
-      this.$router.push(`/board/${id}`);
-    },
-    getRecruitmentMembers(id) {
-      axios
-        .get(`${this.$store.state.host}/program/recruitment/members/${id}`, {
-          headers: {
-            Accesstoken: this.$store.state.accessToken,
-          },
-        })
-        .then((response) => {
-          this.RecruitmentMembers = response.data.response;
-        })
-        .catch((error) => {
-          console.log("지원자 리스트 불러오기 에러 : " + error);
-        });
-    },
-  },
-  created() {
-    axios
-      .get(`${this.$store.state.host}/program/mine`, {
-        headers: {
-          Accesstoken: this.$store.state.accessToken,
-        },
-      })
-      .then((response) => {
-        this.ProgramAllReadResponse = response.data.response;
-        console.log("없어/", this.ProgramAllReadResponse);
-      })
-      .catch((error) => {
-        console.log("내 프로그램 불러오기 오류 : " + error);
-      });
-  },
-};
-</script>
-
 <template>
-  <h1 class="center-content">내가 개최한 프로그램들</h1>
+  <h3 class="center-content">
+    {{ this.$route.params.email }}님이 개최한 프로그램
+  </h3>
   <div class="content">
     <div class="container">
       <div
@@ -91,6 +45,39 @@ export default {
     </div>
   </div>
 </template>
+
+<script>
+import axios from "axios";
+
+export default {
+  name: "MembersPrograms",
+  data() {
+    return {
+      ProgramAllReadResponse: [],
+    };
+  },
+  methods: {
+    routingProgramDetail(id) {
+      this.$router.push(`/program/detail/${id}`);
+    },
+  },
+  created() {
+    axios
+      .get(`${this.$store.state.host}/program/view/programs`, {
+        params: {
+          email: this.$route.params.email,
+        },
+      })
+      .then((response) => {
+        this.ProgramAllReadResponse = response.data.response;
+        console.log("Program list: ", this.ProgramAllReadResponse);
+      })
+      .catch((error) => {
+        console.log("Error fetching programs: ", error);
+      });
+  },
+};
+</script>
 
 <style scoped>
 .main-container {

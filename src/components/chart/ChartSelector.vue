@@ -81,18 +81,18 @@ nav ul li {
 button {
   padding: 10px;
   cursor: pointer;
-  background-color: #ddd;
+  background-color: rgba(139, 87, 42, 0.2);
   border: none;
   border-radius: 5px;
   transition: background-color 0.3s;
 }
 
 button:hover {
-  background-color: #bbb;
+  background-color: #8b572a;
 }
 
 button.active {
-  background-color: #1a1a1c;
+  background-color: #8b572a;
   color: white;
 }
 </style>

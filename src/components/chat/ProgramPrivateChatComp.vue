@@ -11,14 +11,15 @@
           </div>
           <div class="inbox_chat">
             <div
-              class="chat_list active_chat"
+              class="chat_list"
+              :class="{ active_chat: chatroom.channelId === selectedChannelId }"
               v-for="(chatroom, index) in myChatsResponse"
               :key="index"
               @click="selectChatroom(chatroom.channelId)"
             >
               <div class="chat_people">
                 <div class="chat_img">
-                  <img :src="`${chatroom.imageUrl}`" />
+                  <img :src="chatroom.imageUrl" />
                 </div>
                 <div class="chat_ib">
                   <h4>
@@ -53,6 +54,7 @@ export default {
     return {
       myChatsResponse: [],
       channelId: null,
+      selectedChannelId: null,
     };
   },
 
@@ -75,6 +77,7 @@ export default {
   methods: {
     selectChatroom(channelId) {
       this.channelId = channelId;
+      this.selectedChannelId = channelId;
       console.log(this.channelId);
     },
   },
@@ -98,7 +101,7 @@ img {
   max-width: 100%;
 }
 .inbox_people {
-  background: #f8f8f8 none repeat scroll 0 0;
+  background: rgba(255, 220, 159, 0.1) none repeat scroll 0 0;
   float: left;
   overflow: hidden;
   width: 40%;
@@ -125,11 +128,11 @@ img {
 .headind_srch {
   padding: 10px 29px 10px 20px;
   overflow: hidden;
-  border-bottom: 1px solid #c4c4c4;
+  border-bottom: 1px solid #8b572a;
 }
 
 .recent_heading h4 {
-  color: #05728f;
+  color: #8b572a;
   font-size: 21px;
   margin: auto;
 }
@@ -141,7 +144,7 @@ img {
   background: none;
 }
 .srch_bar .input-group-addon button {
-  background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+  background: rgba(255, 220, 159, 0.8) none repeat scroll 0 0;
   border: medium none;
   padding: 0;
   color: #707070;
@@ -191,7 +194,7 @@ img {
 }
 
 .active_chat {
-  background: #ebebeb;
+  background: #926c4c34;
 }
 
 .incoming_msg_img {

@@ -17,6 +17,7 @@ export default {
       content: "",
       stompClient: null,
       connectionStatus: "",
+      people: [],
     };
   },
   created() {
@@ -33,7 +34,9 @@ export default {
     initializeComponent() {
       this.getSubscription().then(() => {
         this.getAllMessages().then(() => {
-          this.connectWebSocket();
+          this.getAllPeople().then(() => {
+            this.connectWebSocket();
+          });
         });
       });
     },
@@ -52,7 +55,6 @@ export default {
         )
         .then((response) => {
           console.log("구독 성공 : " + response.data.response);
-          // 메시지 불러오기
         })
         .catch((error) => {
           console.log("구독 실패 : " + error);
@@ -74,6 +76,29 @@ export default {
           this.messages = response.data.response;
           console.log(this.messages);
           console.log(this.$store.state.loginedEmail);
+          this.$nextTick(() => {
+            this.scrollToBottom();
+          });
+        })
+        .catch((error) => {
+          console.log("메시지 불러오기 오류 : " + error);
+        });
+    },
+
+    getAllPeople() {
+      return axios
+        .get(
+          `${this.$store.state.host}/member-channel-subscription/channel/${this.channelId}`,
+          {
+            headers: {
+              Accesstoken: this.$store.state.accessToken,
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((response) => {
+          this.people = response.data.response;
+          console.log("사람들: ", this.people);
         })
         .catch((error) => {
           console.log("메시지 불러오기 오류 : " + error);
@@ -86,8 +111,7 @@ export default {
       }
 
       this.stompClient = new Client({
-        // 35.216.104.192
-        brokerURL: `ws://localhost:8080/ws`,
+        brokerURL: `${this.$store.state.ws}/ws`,
         connectHeaders: {
           Accesstoken: `Bearer ${this.$store.state.accessToken}`,
         },
@@ -99,6 +123,9 @@ export default {
               try {
                 const parsedMessage = JSON.parse(message.body);
                 this.messages.push(parsedMessage);
+                this.$nextTick(() => {
+                  this.scrollToBottom();
+                });
               } catch (e) {
                 console.error("메시지 파싱 오류:", e);
               }
@@ -137,6 +164,14 @@ export default {
         headers: headers,
       });
       this.content = "";
+      this.$nextTick(() => {
+        this.scrollToBottom();
+      });
+    },
+
+    scrollToBottom() {
+      const container = this.$el.querySelector(".msg_history");
+      container.scrollTop = container.scrollHeight;
     },
   },
 };
@@ -144,6 +179,23 @@ export default {
 
 <template>
   <div class="mesgs">
+    <div class="btn-group dropstart" style="float: right">
+      <button
+        type="button"
+        class="btn btn-secondary dropdown-toggle"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        <i class="bi bi-people-fill"></i> {{ people.length }}
+      </button>
+      <ul class="dropdown-menu">
+        <li v-for="(person, index) in people" :key="index">
+          <a class="dropdown-item"
+            ><i class="bi bi-person-circle">{{}}</i> {{ person }}</a
+          >
+        </li>
+      </ul>
+    </div>
     <div class="msg_history">
       <div
         v-for="(message, index) in messages"
@@ -161,7 +213,7 @@ export default {
           <img
             src="https://ptetutorials.com/images/user-profile.png"
             alt="user"
-          />{{ message.senderEmail }}
+          />{{ message.senderName }}
         </div>
         <div
           :class="
@@ -241,7 +293,7 @@ img {
 }
 
 .recent_heading h4 {
-  color: #05728f;
+  color: #8b572a;
   font-size: 21px;
   margin: auto;
 }
@@ -317,9 +369,9 @@ img {
   width: 92%;
 }
 .received_withd_msg p {
-  background: #ebebeb none repeat scroll 0 0;
+  background: #5d5547b1 none repeat scroll 0 0;
   border-radius: 3px;
-  color: #646464;
+  color: #ffffff;
   font-size: 14px;
   margin: 0;
   padding: 5px 10px 5px 12px;
@@ -341,7 +393,7 @@ img {
 }
 
 .sent_msg p {
-  background: #05728f none repeat scroll 0 0;
+  background: #926c4cb8 none repeat scroll 0 0;
   border-radius: 3px;
   font-size: 14px;
   margin: 0;
@@ -371,7 +423,7 @@ img {
   position: relative;
 }
 .msg_send_btn {
-  background: #05728f none repeat scroll 0 0;
+  background: #926c4c none repeat scroll 0 0;
   border: medium none;
   border-radius: 50%;
   color: #fff;

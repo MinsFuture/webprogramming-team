@@ -66,7 +66,15 @@ export default {
   data() {
     return {
       selectedCategory: "전체",
-      categories: ["전체", "SPORTS", "COMPUTER", "ART"],
+      categories: [
+        "전체",
+        "SPORTS",
+        "COMPUTER",
+        "ART",
+        "MUSIC",
+        "COOKING",
+        "ETC",
+      ],
       categoryNames: {
         전체: "ALL",
         SPORTS: "SPORTS",
@@ -98,7 +106,10 @@ export default {
         전체: "전체",
         SPORTS: "스포츠",
         COMPUTER: "컴퓨터",
-        ART: "예술",
+        ART: "미술",
+        MUSIC: "음악",
+        COOKING: "요리",
+        ETC: "기타",
       }[category];
     },
   },
@@ -114,7 +125,7 @@ export default {
 .sidebar {
   width: 200px;
   margin-right: 2rem;
-  background-color: #f8f9fa;
+  background-color: rgba(255, 220, 159, 0.1);
   padding: 1rem;
   border-radius: 8px; /* 둥근 모서리 */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -139,7 +150,7 @@ export default {
 }
 
 .sidebar li.active {
-  background-color: black;
+  background-color: rgba(139, 87, 42, 0.7);
   color: white;
 }
 
@@ -156,12 +167,13 @@ export default {
 .card {
   width: 12rem;
   cursor: pointer;
+  border-color: rgba(139, 87, 42, 0.7);
   transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .card:hover {
   transform: scale(1.05);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(139, 87, 42, 0.7);
 }
 
 .badge-light-custom {
