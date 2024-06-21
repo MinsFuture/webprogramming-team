@@ -183,7 +183,6 @@ export default {
 
       if (this.$refs.form.checkValidity()) {
         // 폼이 유효한 경우 처리 로직 (예: API 호출)
-        this.getCoordinate();
         console.log(this.form);
         axios
           .post(
@@ -259,6 +258,7 @@ export default {
             let roadAddr = data.roadAddress;
             // 변환된 주소를 폼에 적용
             this.location = roadAddr;
+            this.getCoordinate();
           },
         }).open();
       } else {

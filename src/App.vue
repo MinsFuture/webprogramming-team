@@ -23,6 +23,10 @@
               >전국 프로그램 현황</a
             >
           </li>
+          <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/nearby">주위 프로그램 찾기</a>
+          </li>
+
         </ul>
 
         <div class="icon-group ms-auto">

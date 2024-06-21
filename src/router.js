@@ -10,6 +10,7 @@ import UpdateBoardComp from "@/components/program/UpdateBoardComp.vue";
 import Chart from "@/components/chart/ChartSelector.vue";
 import AllChatComp from "@/components/AllChatComp.vue";
 import ProgramPrivateChatComp from "@/components/chat/ProgramPrivateChatComp.vue";
+import KakaoMapComp from "@/components/KakaoMapComp.vue";
 
 const routes = [
   {
@@ -57,6 +58,10 @@ const routes = [
     path: "/client/chats/program_private",
     component: ProgramPrivateChatComp,
   },
+  {
+    path: "/nearby",
+    component: KakaoMapComp
+  }
 ];
 
 const router = createRouter({
