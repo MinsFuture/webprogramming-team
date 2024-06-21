@@ -81,7 +81,46 @@
           <section class="mb-5">
             <p class="fs-5 mb-4">{{ programIdReadResponse.content }}</p>
           </section>
+          <div
+            class="side-widget2 bg-light border rounded p-3"
+            style="
+              max-width: 300px;
+              margin: auto;
+              box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            "
+          >
+            <h5 style="text-align: center">
+              <a
+                class="badge text-bg-dark text-decoration-none link-light"
+                href="#!"
+                style="font-size: 1.2em; padding: 0.5em 1em"
+              >
+                프로그램 개최자 정보
+              </a>
+            </h5>
+            <div style="text-align: center; margin: 20px 0">
+              <img
+                src="https://ptetutorials.com/images/user-profile.png"
+                alt="user"
+                width="100px"
+                style="border-radius: 50%; border: 2px solid #ddd; padding: 5px"
+              />
+            </div>
+            <h2 class="text-muted" style="text-align: center; font-size: 1.5em">
+              {{ programIdReadResponse.memberName }}
+            </h2>
+
+            <h5 class="fw-bolder" style="margin-top: 20px">개최자 연락처</h5>
+            <div class="text-muted" style="margin-bottom: 10px">
+              {{ programIdReadResponse.memberEmail }}
+            </div>
+            <h5 class="fw-bolder">개최자 프로그램 평균 별점</h5>
+            <div class="text-muted">
+              {{ programIdReadResponse.memberRating }}
+            </div>
+          </div>
         </article>
+
         <h2>
           <a
             class="badge rounded-pill text-bg-warning text-decoration-none link-light"
@@ -91,6 +130,7 @@
             리뷰
           </a>
         </h2>
+
         <!-- 댓글 폼 및 댓글 목록 -->
         <section class="comments mb-5">
           <!-- 댓글 폼 -->
@@ -139,6 +179,7 @@
             <br />
             <br />
           </form>
+
           <!-- 댓글 목록 -->
           <div
             v-for="review in reviewAllReadResponse"
@@ -415,7 +456,12 @@ export default {
   padding: 1rem;
   border-radius: 0.5rem;
 }
-
+.side-widget2 {
+  width: 500px;
+  border: 1px solid #ddd;
+  padding: 1rem;
+  border-radius: 0.5rem;
+}
 .border-rounded {
   border: 1px solid #ddd;
   border-radius: 0.5rem;
