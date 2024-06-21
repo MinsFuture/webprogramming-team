@@ -186,7 +186,7 @@ export default {
         data-bs-toggle="dropdown"
         aria-expanded="false"
       >
-        <i class="bi bi-people-fill"></i>
+        <i class="bi bi-people-fill"></i> {{ people.length }}
       </button>
       <ul class="dropdown-menu">
         <li v-for="(person, index) in people" :key="index">
