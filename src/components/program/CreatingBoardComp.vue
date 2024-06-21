@@ -49,9 +49,6 @@ export default {
       if (this.isFormValid) {
         let formData = new FormData();
 
-        console.log(this.ProgramSaveRequest.latitude);
-        console.log(this.ProgramSaveRequest.longitude);
-
         formData.append(
           "ProgramSaveRequest",
           new Blob([JSON.stringify(this.ProgramSaveRequest)], {

@@ -19,8 +19,8 @@ export default {
   data() {
     return {
       coordinate: {
-        lat: 35.8240759101236,
-        lng: 128.633555577344,
+        lat: this.$store.state.latitude,
+        lng: this.$store.state.longitude,
       },
       radius: 5,
       programAllReadResponse: [],
@@ -42,6 +42,7 @@ export default {
         console.log('지도 불러오기 오류 ' + error);
       })
     },
+
     onClickKakaoMapMarker(id) {
       this.$router.push(`/board/${id}`)
     }

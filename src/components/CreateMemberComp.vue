@@ -196,6 +196,9 @@ export default {
           )
           .then(() => {
             alert("회원 가입 성공!");
+            this.$store.state.longitude = this.form.longitude;
+            this.$store.state.latitude = this.form.latitude;
+
             this.$router.push("/login");
           })
           .catch((error) => {
