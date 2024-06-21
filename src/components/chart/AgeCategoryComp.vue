@@ -193,7 +193,7 @@ nav ul li {
   left: 50px;
   width: 200px;
   margin-right: 2rem;
-  background-color: #f8f9fa;
+  background-color: rgba(255, 220, 159, 0.1);
   padding: 1rem;
   border-radius: 8px; /* 둥근 모서리 */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -214,11 +214,11 @@ nav ul li {
 }
 
 .sidebar li:hover {
-  background-color: #e9ecef;
+  background-color: rgba(139, 87, 42, 0.2);
 }
 
 .sidebar li.active {
-  background-color: black;
+  background-color: #8b572a;
   color: white;
 }
 

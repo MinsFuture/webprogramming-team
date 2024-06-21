@@ -11,6 +11,7 @@ import Chart from "@/components/chart/ChartSelector.vue";
 import AllChatComp from "@/components/AllChatComp.vue";
 import ProgramPrivateChatComp from "@/components/chat/ProgramPrivateChatComp.vue";
 import KakaoMapComp from "@/components/KakaoMapComp.vue";
+import MembersPrograms from "@/components/program/MembersPrograms.vue";
 
 const routes = [
   {
@@ -60,8 +61,12 @@ const routes = [
   },
   {
     path: "/nearby",
-    component: KakaoMapComp
-  }
+    component: KakaoMapComp,
+  },
+  {
+    path: "/board/programs/:email",
+    component: MembersPrograms,
+  },
 ];
 
 const router = createRouter({

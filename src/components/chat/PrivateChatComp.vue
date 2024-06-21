@@ -293,7 +293,7 @@ img {
 }
 
 .recent_heading h4 {
-  color: #05728f;
+  color: #8b572a;
   font-size: 21px;
   margin: auto;
 }
@@ -369,9 +369,9 @@ img {
   width: 92%;
 }
 .received_withd_msg p {
-  background: #ebebeb none repeat scroll 0 0;
+  background: #5d5547b1 none repeat scroll 0 0;
   border-radius: 3px;
-  color: #646464;
+  color: #ffffff;
   font-size: 14px;
   margin: 0;
   padding: 5px 10px 5px 12px;
@@ -393,7 +393,7 @@ img {
 }
 
 .sent_msg p {
-  background: #05728f none repeat scroll 0 0;
+  background: #926c4cb8 none repeat scroll 0 0;
   border-radius: 3px;
   font-size: 14px;
   margin: 0;
@@ -423,7 +423,7 @@ img {
   position: relative;
 }
 .msg_send_btn {
-  background: #05728f none repeat scroll 0 0;
+  background: #926c4c none repeat scroll 0 0;
   border: medium none;
   border-radius: 50%;
   color: #fff;

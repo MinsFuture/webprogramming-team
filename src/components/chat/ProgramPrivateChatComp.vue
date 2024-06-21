@@ -101,7 +101,7 @@ img {
   max-width: 100%;
 }
 .inbox_people {
-  background: #f8f8f8 none repeat scroll 0 0;
+  background: rgba(255, 220, 159, 0.1) none repeat scroll 0 0;
   float: left;
   overflow: hidden;
   width: 40%;
@@ -128,11 +128,11 @@ img {
 .headind_srch {
   padding: 10px 29px 10px 20px;
   overflow: hidden;
-  border-bottom: 1px solid #c4c4c4;
+  border-bottom: 1px solid #8b572a;
 }
 
 .recent_heading h4 {
-  color: #05728f;
+  color: #8b572a;
   font-size: 21px;
   margin: auto;
 }
@@ -144,7 +144,7 @@ img {
   background: none;
 }
 .srch_bar .input-group-addon button {
-  background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
+  background: rgba(255, 220, 159, 0.8) none repeat scroll 0 0;
   border: medium none;
   padding: 0;
   color: #707070;
@@ -194,7 +194,7 @@ img {
 }
 
 .active_chat {
-  background: #fbe795;
+  background: #926c4c34;
 }
 
 .incoming_msg_img {

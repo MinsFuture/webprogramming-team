@@ -81,58 +81,24 @@
           <section class="mb-5">
             <p class="fs-5 mb-4">{{ programIdReadResponse.content }}</p>
           </section>
-          <div
-            class="side-widget2 bg-light border rounded p-3"
-            style="
-              max-width: 300px;
-              margin: auto;
-              box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            "
-          >
-            <h5 style="text-align: center">
-              <a
-                class="badge text-bg-dark text-decoration-none link-light"
-                href="#!"
-                style="font-size: 1.2em; padding: 0.5em 1em"
-              >
-                프로그램 개최자 정보
-              </a>
-            </h5>
-            <div style="text-align: center; margin: 20px 0">
-              <img
-                src="https://ptetutorials.com/images/user-profile.png"
-                alt="user"
-                width="100px"
-                style="border-radius: 50%; border: 2px solid #ddd; padding: 5px"
-              />
-            </div>
-            <h2 class="text-muted" style="text-align: center; font-size: 1.5em">
-              {{ programIdReadResponse.memberName }}
-            </h2>
-
-            <h5 class="fw-bolder" style="margin-top: 20px">개최자 연락처</h5>
-            <div class="text-muted" style="margin-bottom: 10px">
-              {{ programIdReadResponse.memberEmail }}
-            </div>
-            <h5 class="fw-bolder">개최자 프로그램 평균 별점</h5>
-            <div class="text-muted">
-              {{ programIdReadResponse.memberRating }}
-            </div>
-          </div>
         </article>
-
-        <h2>
-          <a
-            class="badge rounded-pill text-bg-warning text-decoration-none link-light"
-            href="#!"
-            style="float: right"
-          >
-            리뷰
-          </a>
-        </h2>
 
         <!-- 댓글 폼 및 댓글 목록 -->
         <section class="comments mb-5">
+          <h2>
+            <a
+              class="badge text-bg-warning text-decoration-none link-light"
+              href="#!"
+            >
+              리뷰
+            </a>
+            ⭐
+            {{
+              programIdReadResponse.avgRating === "NaN"
+                ? "-"
+                : programIdReadResponse.avgRating
+            }}
+          </h2>
           <!-- 댓글 폼 -->
           <form @submit.prevent="submitComment">
             <!-- 별점 입력 -->
@@ -173,8 +139,16 @@
             </div>
 
             <!-- 댓글 작성 버튼 -->
-            <button type="submit" class="btn btn-primary" style="float: right">
-              댓글 작성
+            <button
+              type="submit"
+              class="btn"
+              style="
+                float: right;
+                background-color: rgba(139, 87, 42, 0.7);
+                color: white;
+              "
+            >
+              리뷰 등록
             </button>
             <br />
             <br />
@@ -227,7 +201,10 @@
       </div>
       <!-- 사이드 위젯 -->
       <div class="col-lg-4">
-        <div class="side-widget bg-light border rounded p-3">
+        <div
+          class="side-widget border rounded p-3 mb-4"
+          style="background-color: rgba(255, 220, 159, 0.1)"
+        >
           <h4 class="fw-bolder">모집 기간</h4>
           <p class="fs-5">
             {{ programIdReadResponse.recruitmentStartDate }} ~
@@ -253,10 +230,62 @@
           </button>
           <button
             type="button"
-            class="btn btn-dark"
+            class="btn"
             @click="routingAllChatComp"
+            style="background-color: rgba(139, 87, 42, 0.7); color: white"
           >
             채팅하기
+          </button>
+        </div>
+
+        <div
+          class="side-widget2 border rounded p-3"
+          style="
+            max-width: 350px;
+            margin: auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: rgba(255, 220, 159, 0.1);
+          "
+        >
+          <h6 style="text-align: center">
+            <a
+              class="badge text-decoration-none link-light"
+              href="#!"
+              style="
+                font-size: 1.2em;
+                padding: 0.5em 1em;
+                background-color: rgba(139, 87, 42, 0.7);
+              "
+            >
+              프로그램 개최자 정보
+            </a>
+          </h6>
+          <div style="text-align: center; margin: 20px 0">
+            <img
+              src="https://ptetutorials.com/images/user-profile.png"
+              alt="user"
+              width="100px"
+              style="border-radius: 50%; border: 2px solid #ddd; padding: 5px"
+            />
+          </div>
+          <h2 class="text-muted" style="text-align: center; font-size: 1.5em">
+            {{ programIdReadResponse.memberName }}
+          </h2>
+
+          <h6 class="fw-bolder" style="margin-top: 20px">개최자 연락처</h6>
+          <div class="text-muted" style="margin-bottom: 10px">
+            {{ programIdReadResponse.memberEmail }}
+          </div>
+          <h6 class="fw-bolder">개최자 프로그램 평균 별점</h6>
+          <div class="text-muted">
+            ⭐ {{ programIdReadResponse.memberRating }}
+          </div>
+          <hr />
+          <button
+            style="border: transparent; text-align: center"
+            @click="routingMemberPrograms"
+          >
+            ➡️ {{ programIdReadResponse.memberName }} 의 다른 프로그램 보러가기
           </button>
         </div>
       </div>
@@ -364,6 +393,9 @@ export default {
     routingUpdateComp() {
       this.$router.push(`/board/update/${this.$route.params.id}`);
     },
+    routingMemberPrograms() {
+      this.$router.push(`/programs/${this.programIdReadResponse.memberEmail}`);
+    },
     deleteProgram() {
       let id = this.$route.params.id;
 
@@ -455,6 +487,7 @@ export default {
   border: 1px solid #ddd;
   padding: 1rem;
   border-radius: 0.5rem;
+  margin-bottom: 20px;
 }
 .side-widget2 {
   width: 500px;
