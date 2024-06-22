@@ -1,55 +1,55 @@
 <template>
   <nav
-    class="navbar navbar-expand-lg"
-    style="background-color: #ffdc9f"
-    data-bs-theme="dark"
+      class="navbar navbar-expand-lg"
+      style="background-color: #ffdc9f"
+      data-bs-theme="dark"
   >
     <div class="container-fluid">
-      <img :src="require('@/logo3.png')" width="230px" href="/" />
+      <img :src="require('@/logo3.png')" width="230px" href="/"/>
       <button
-        class="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
       >
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse click" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <router-link
-              to="/"
-              class="nav-link"
-              active-class="active"
-              style="color: #8b572a"
-              >프로그램</router-link
+            <a
+                href="/"
+                class="nav-link"
+                active-class="active"
+                style="color: #8b572a"
+            >프로그램</a
             >
           </li>
           <li class="nav-item">
             <div class="nav-link" style="color: #8b572a">|</div>
           </li>
           <li class="nav-item">
-            <router-link
-              to="/nearby"
-              class="nav-link"
-              active-class="active"
-              style="color: #8b572a"
-              >내 주위 프로그램 찾기</router-link
+            <a
+                href="/nearby"
+                class="nav-link"
+                active-class="active"
+                style="color: #8b572a"
+            >내 주위 프로그램 찾기</a
             >
           </li>
           <li class="nav-item">
             <div class="nav-link" style="color: #8b572a">|</div>
           </li>
           <li class="nav-item">
-            <router-link
-              to="/chart"
-              class="nav-link"
-              active-class="active"
-              style="color: #8b572a"
-              >전국 프로그램 현황</router-link
+            <a
+                href="/chart"
+                class="nav-link"
+                active-class="active"
+                style="color: #8b572a"
+            >전국 프로그램 현황</a
             >
           </li>
         </ul>
@@ -57,76 +57,76 @@
         <div class="icon-group ms-auto">
           <div v-if="this.$store.state.isLogin" class="dropdown-center">
             <i
-              class="bi bi-chat-fill"
-              @click="routingProgramPrivateChatComp"
-              style="color: rgba(139, 87, 42, 0.9)"
+                class="bi bi-chat-fill"
+                @click="routingProgramPrivateChatComp"
+                style="color: rgba(139, 87, 42, 0.9)"
             ></i>
             <i
-              class="bi bi-person-circle dropdown-toggle"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-              style="color: rgba(139, 87, 42, 0.9)"
+                class="bi bi-person-circle dropdown-toggle"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                style="color: rgba(139, 87, 42, 0.9)"
             ></i>
             <ul
-              class="dropdown-menu"
-              style="background-color: rgba(139, 87, 42, 0.9)"
+                class="dropdown-menu"
+                style="background-color: rgba(139, 87, 42, 0.9)"
             >
               <li>
                 <a
-                  class="dropdown-item"
-                  @click="routingMyBoards"
-                  style="color: white"
-                  >내가 쓴 글</a
+                    class="dropdown-item"
+                    @click="routingMyBoards"
+                    style="color: white"
+                >내가 쓴 글</a
                 >
               </li>
               <li>
                 <a
-                  class="dropdown-item"
-                  @click="routingMyAttendPrograms"
-                  style="color: white"
-                  >내가 신청한 프로그램</a
+                    class="dropdown-item"
+                    @click="routingMyAttendPrograms"
+                    style="color: white"
+                >내가 신청한 프로그램</a
                 >
               </li>
               <li>
                 <a
-                  class="dropdown-item"
-                  @click="routingMyRanksComp"
-                  style="color: white"
-                  >내 등급</a
+                    class="dropdown-item"
+                    @click="routingMyRanksComp"
+                    style="color: white"
+                >내 등급</a
                 >
               </li>
               <li>
                 <a class="dropdown-item" @click="logout" style="color: white"
-                  >로그아웃</a
+                >로그아웃</a
                 >
               </li>
             </ul>
           </div>
         </div>
         <button
-          v-if="!this.$store.state.isLogin"
-          @click="routingLoginComp"
-          type="button"
-          class="btn"
-          style="background-color: rgba(139, 87, 42, 0.7); color: white"
+            v-if="!this.$store.state.isLogin"
+            @click="routingLoginComp"
+            type="button"
+            class="btn"
+            style="background-color: rgba(139, 87, 42, 0.7); color: white"
         >
           로그인
         </button>
         <button
-          v-if="!this.$store.state.isLogin"
-          @click="routingCreateMemberComp"
-          type="button"
-          class="btn"
-          style="background-color: rgba(139, 87, 42, 0.7); color: white"
+            v-if="!this.$store.state.isLogin"
+            @click="routingCreateMemberComp"
+            type="button"
+            class="btn"
+            style="background-color: rgba(139, 87, 42, 0.7); color: white"
         >
           회원가입
         </button>
         <button
-          v-else
-          type="button"
-          @click="routingCreateBoardComp"
-          class="btn"
-          style="background-color: rgba(139, 87, 42, 0.9); color: white"
+            v-else
+            type="button"
+            @click="routingCreateBoardComp"
+            class="btn"
+            style="background-color: rgba(139, 87, 42, 0.9); color: white"
         >
           글쓰기
         </button>
@@ -139,23 +139,23 @@
       <nav class="navbar" style="background-color: white">
         <div class="container-fluid" style="background-color: white">
           <form
-            class="d-flex"
-            role="search"
-            @submit.prevent="searchPrograms"
-            style="margin-bottom: 15px; background-color: white"
+              class="d-flex"
+              role="search"
+              @submit.prevent="searchPrograms"
+              style="margin-bottom: 15px; background-color: white"
           >
             <input
-              v-model="searchTitle"
-              class="form-control me-2"
-              type="search"
-              placeholder="검색어를 입력하세요"
-              aria-label="Search"
-              style="width: 500px; border-color: #8b572a"
+                v-model="searchTitle"
+                class="form-control me-2"
+                type="search"
+                placeholder="검색어를 입력하세요"
+                aria-label="Search"
+                style="width: 500px; border-color: #8b572a"
             />
             <button
-              class="btn2"
-              type="submit"
-              style="width: 100px; color: #8b572a"
+                class="btn2"
+                type="submit"
+                style="width: 100px; color: #8b572a"
             >
               검색
             </button>
@@ -166,23 +166,23 @@
     <div class="d-flex align-items-center justify-content-end mb-2">
       <div>
         <button
-          class="btn btn-link text-secondary me-2"
-          :class="{ 'text-primary': isRecentSorted }"
-          @click="recentedSort"
+            class="btn btn-link text-secondary me-2"
+            :class="{ 'text-primary': isRecentSorted }"
+            @click="recentedSort"
         >
           최신 순 정렬
         </button>
         <button
-          class="btn btn-link text-secondary"
-          :class="{ 'text-primary': isOpenLists }"
-          @click="nowOpenLists"
+            class="btn btn-link text-secondary"
+            :class="{ 'text-primary': isOpenLists }"
+            @click="nowOpenLists"
         >
           모집 중
         </button>
         <button
-          v-if="isOpenLists || isRecentSorted"
-          class="btn btn-link text-secondary"
-          @click="clearFilters"
+            v-if="isOpenLists || isRecentSorted"
+            class="btn btn-link text-secondary"
+            @click="clearFilters"
         >
           필터 해제
         </button>
@@ -192,7 +192,7 @@
       </div>
     </div>
     <HomeBoardComp
-      :programAllReadResponse="programAllReadResponse"
+        :programAllReadResponse="programAllReadResponse"
     ></HomeBoardComp>
   </div>
   <router-view></router-view>
@@ -241,53 +241,53 @@ export default {
     selectCategory(category) {
       this.selectedCategory = category;
       axios
-        .get(`${this.$store.state.host}/program/category/${category}`)
-        .then((response) => {
-          this.programAllReadResponse = response.data.response;
-        })
-        .catch((error) => {
-          console.log("홈 화면 불러오기 오류 : " + error);
-        });
+          .get(`${this.$store.state.host}/program/category/${category}`)
+          .then((response) => {
+            this.programAllReadResponse = response.data.response;
+          })
+          .catch((error) => {
+            console.log("홈 화면 불러오기 오류 : " + error);
+          });
     },
     searchPrograms() {
       axios
-        .post(`${this.$store.state.host}/program/search`, {
-          searchTitle: this.searchTitle,
-        })
-        .then((response) => {
-          this.programAllReadResponse = response.data.response;
-          this.isRecentSorted = true;
-          this.isOpenLists = false;
-        })
-        .catch((error) => {
-          console.log("검색 결과 불러오기 오류 : " + error);
-        });
+          .post(`${this.$store.state.host}/program/search`, {
+            searchTitle: this.searchTitle,
+          })
+          .then((response) => {
+            this.programAllReadResponse = response.data.response;
+            this.isRecentSorted = true;
+            this.isOpenLists = false;
+          })
+          .catch((error) => {
+            console.log("검색 결과 불러오기 오류 : " + error);
+          });
     },
 
     recentedSort() {
       axios
-        .get(`${this.$store.state.host}/program/category/date`)
-        .then((response) => {
-          this.programAllReadResponse = response.data.response;
-          this.isRecentSorted = true;
-          this.isOpenLists = false;
-        })
-        .catch((error) => {
-          console.log("홈 화면 불러오기 오류 : " + error);
-        });
+          .get(`${this.$store.state.host}/program/category/date`)
+          .then((response) => {
+            this.programAllReadResponse = response.data.response;
+            this.isRecentSorted = true;
+            this.isOpenLists = false;
+          })
+          .catch((error) => {
+            console.log("홈 화면 불러오기 오류 : " + error);
+          });
     },
 
     nowOpenLists() {
       axios
-        .get(`${this.$store.state.host}/program/category/open`)
-        .then((response) => {
-          this.programAllReadResponse = response.data.response;
-          this.isOpenLists = true;
-          this.isRecentSorted = false;
-        })
-        .catch((error) => {
-          console.log("홈 화면 불러오기 오류 : " + error);
-        });
+          .get(`${this.$store.state.host}/program/category/open`)
+          .then((response) => {
+            this.programAllReadResponse = response.data.response;
+            this.isOpenLists = true;
+            this.isRecentSorted = false;
+          })
+          .catch((error) => {
+            console.log("홈 화면 불러오기 오류 : " + error);
+          });
     },
 
     clearFilters() {
@@ -306,13 +306,13 @@ export default {
 
     loadInitialData() {
       axios
-        .get(`${this.$store.state.host}/program/view`)
-        .then((response) => {
-          this.programAllReadResponse = response.data.response;
-        })
-        .catch((error) => {
-          console.log("홈 화면 불러오기 오류 : " + error);
-        });
+          .get(`${this.$store.state.host}/program/view`)
+          .then((response) => {
+            this.programAllReadResponse = response.data.response;
+          })
+          .catch((error) => {
+            console.log("홈 화면 불러오기 오류 : " + error);
+          });
     },
   },
   mounted() {
@@ -347,6 +347,7 @@ export default {
   font-weight: bold;
   color: rgb(83, 52, 26);
 }
+
 .nav-link.active {
   /* 배경색 변경 */
   color: rgba(139, 87, 42, 1); /* 글꼴 색상 변경 */
@@ -381,12 +382,14 @@ export default {
 .btn {
   margin-left: 5px;
 }
+
 .btn2 {
   background-color: rgba(255, 220, 159, 0.1);
   border-color: rgba(139, 87, 42, 1);
   border-radius: 6px;
   border-width: 1px;
 }
+
 .btn2:hover {
   background-color: rgba(255, 220, 159, 0.3);
   border-color: rgba(139, 87, 42, 1);

@@ -15,22 +15,22 @@ export default {
     cancel(id) {
       if (confirm("취소하시겠습니까?")) {
         axios
-          .post(
-            `${this.$store.state.host}/program/recruitment/cancel/${id}`,
-            null,
-            {
-              headers: {
-                Accesstoken: this.$store.state.accessToken,
-              },
-            }
-          )
-          .then(() => {
-            alert("취소 성공!");
-            this.$router.push("/programs/me");
-          })
-          .catch((error) => {
-            console.log("취소 에러 : " + error);
-          });
+            .post(
+                `${this.$store.state.host}/program/recruitment/cancel/${id}`,
+                null,
+                {
+                  headers: {
+                    Accesstoken: this.$store.state.accessToken,
+                  },
+                }
+            )
+            .then(() => {
+              alert("취소 성공!");
+              this.$router.push("/programs/me");
+            })
+            .catch((error) => {
+              console.log("취소 에러 : " + error);
+            });
       } else {
         alert("취소를 중단하셨습니다.");
       }
@@ -38,38 +38,38 @@ export default {
   },
   created() {
     axios
-      .get(`${this.$store.state.host}/program/recruitment/programs`, {
-        headers: {
-          Accesstoken: this.$store.state.accessToken,
-        },
-      })
-      .then((response) => {
-        this.memberProgramRecruitmentResponse = response.data.response;
-        console.log("왜 안됨", this.memberProgramRecruitmentResponse);
-      })
-      .catch((error) => {
-        console.log("내 프로그램 불러오기 오류 : " + error);
-      });
+        .get(`${this.$store.state.host}/program/recruitment/programs`, {
+          headers: {
+            Accesstoken: this.$store.state.accessToken,
+          },
+        })
+        .then((response) => {
+          this.memberProgramRecruitmentResponse = response.data.response;
+          console.log("왜 안됨", this.memberProgramRecruitmentResponse);
+        })
+        .catch((error) => {
+          console.log("내 프로그램 불러오기 오류 : " + error);
+        });
   },
 };
 </script>
 
 <template>
+  <h2 class="center-content" style="color: #8b572a">
+    내가 신청한 프로그램들
+  </h2>
   <div class="container">
-    <h2 class="center-content" style="color: #8b572a">
-      내가 신청한 프로그램들
-    </h2>
     <div class="content">
       <div
-        @click="routingProgramDetail(program.id)"
-        class="card"
-        v-for="program in memberProgramRecruitmentResponse"
-        :key="program.id"
+          @click="routingProgramDetail(program.programId)"
+          class="card"
+          v-for="program in memberProgramRecruitmentResponse"
+          :key="program.id"
       >
         <img
-          :src="`${program.imageUrl}`"
-          class="card-img-top fixed-size-img"
-          alt="gd"
+            :src="`${program.imageUrl}`"
+            class="card-img-top fixed-size-img"
+            alt="gd"
         />
         <div class="card-body">
           <h5 class="card-title">{{ program.title }}</h5>
@@ -78,11 +78,11 @@ export default {
               program.ratingCnt
             }})
           </h5>
-          <br />
+          <br/>
           <p class="card-text">
             <small class="text-body-secondary">
               <span
-                :class="{
+                  :class="{
                   'badge text-white bg-primary': program.open === 'OPEN',
                   'badge text-white bg-danger': program.open === 'CLOSED',
                 }"

@@ -10,7 +10,6 @@
 </template>
 
 <script>
-import {useKakao} from 'vue3-kakao-maps/@utils';
 import {KakaoMap, KakaoMapMarker} from 'vue3-kakao-maps';
 import axios from "axios";
 
@@ -48,7 +47,6 @@ export default {
     }
   },
   created() {
-    useKakao('YOUR_API_KEY');
     this.getNearByPrograms();
   },
   components: {
