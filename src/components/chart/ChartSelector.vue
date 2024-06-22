@@ -19,20 +19,11 @@
               연령별 카테고리 참여율
             </button>
           </li>
-          <li>
-            <button
-              @click="selectNumber(2)"
-              :class="{ active: selectedNumber === 2 }"
-            >
-              지역별 카테고리 참여율
-            </button>
-          </li>
         </ul>
       </nav>
     </header>
     <CityCategoryComp v-if="selectedNumber === 0"></CityCategoryComp>
     <AgeCategoryComp v-if="selectedNumber === 1"></AgeCategoryComp>
-    <CityCategoryAgeChart v-if="selectedNumber === 2"></CityCategoryAgeChart>
   </div>
 </template>
 
@@ -40,10 +31,9 @@
 import { defineComponent } from "vue";
 import CityCategoryComp from "@/components/chart/CityCategoryComp.vue";
 import AgeCategoryComp from "@/components/chart/AgeCategoryComp.vue";
-import CityCategoryAgeChart from "@/components/chart/CityCategoryAgeChart.vue";
 
 export default defineComponent({
-  components: { AgeCategoryComp, CityCategoryComp, CityCategoryAgeChart },
+  components: { AgeCategoryComp, CityCategoryComp},
   data() {
     return {
       selectedNumber: 0,

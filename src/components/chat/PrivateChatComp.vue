@@ -176,7 +176,6 @@ export default {
   },
 };
 </script>
-
 <template>
   <div class="mesgs">
     <div class="btn-group dropstart" style="float: right">
@@ -208,14 +207,15 @@ export default {
       >
         <div
             v-if="message.senderEmail !== this.$store.state.loginedEmail"
-            class="incoming_msg_img"
+            class="incoming_msg_info"
         >
           <img
               src="https://ptetutorials.com/images/user-profile.png"
               alt="user"
+              class="incoming_msg_img"
           />
+          <span class="sender_name"  v-if="message.senderEmail !== this.$store.state.loginedEmail">{{ message.senderName }}</span>
         </div>
-        {{ message.senderName }}
         <div
             :class="
             message.senderEmail === this.$store.state.loginedEmail
@@ -252,8 +252,8 @@ export default {
   cursor: pointer;
 }
 .list-group-item:hover {
-  background-color: #f0f0f0; /* 변경할 배경 색상 */
-  transition: background-color 0.3s ease; /* 부드럽게 변화하도록 transition 추가 */
+  background-color: #f0f0f0;
+  transition: background-color 0.3s ease;
 }
 .container {
   max-width: 1170px;
@@ -277,7 +277,6 @@ img {
 .top_spac {
   margin: 20px 0 0;
 }
-
 .recent_heading {
   float: left;
   width: 40%;
@@ -292,7 +291,6 @@ img {
   overflow: hidden;
   border-bottom: 1px solid #c4c4c4;
 }
-
 .recent_heading h4 {
   color: #8b572a;
   font-size: 21px;
@@ -315,7 +313,6 @@ img {
 .srch_bar .input-group-addon {
   margin: 0 0 0 -27px;
 }
-
 .chat_ib h4 {
   font-size: 20px;
   color: #464646;
@@ -340,7 +337,6 @@ img {
   padding: 0 0 0 15px;
   width: 88%;
 }
-
 .chat_people {
   overflow: hidden;
   clear: both;
@@ -354,14 +350,24 @@ img {
   height: 550px;
   overflow-y: scroll;
 }
-
 .active_chat {
   background: #ebebeb;
 }
-
 .incoming_msg_img {
   display: inline-block;
-  width: 6%;
+  width: 30px; /* Adjusted width */
+  height: 30px; /* Adjusted height */
+  vertical-align: middle; /* Aligns the image vertically in the middle */
+  margin-right: 10px; /* Space between image and name */
+}
+.sender_name {
+  display: inline-block;
+  vertical-align: middle; /* Aligns the name vertically in the middle */
+  font-weight: bold; /* Makes the name bold */
+}
+.incoming_msg_info {
+  display: flex;
+  align-items: center;
 }
 .received_msg {
   display: inline-block;
@@ -392,7 +398,6 @@ img {
   padding: 30px 15px 0 25px;
   width: 60%;
 }
-
 .sent_msg p {
   background: #926c4cb8 none repeat scroll 0 0;
   border-radius: 3px;
@@ -418,7 +423,6 @@ img {
   min-height: 48px;
   width: 100%;
 }
-
 .type_msg {
   border-top: 1px solid #c4c4c4;
   position: relative;
