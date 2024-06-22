@@ -177,9 +177,12 @@ export default {
       <div class="mb-3">
         <select v-model="ProgramUpdateRequest.category" class="form-select" required aria-label="select example">
           <option value="">카테고리를 선택하세요</option>
-          <option value="0">교육</option>
-          <option value="1">봉사</option>
-          <option value="2">운동</option>
+          <option value="SPORTS">스포츠</option>
+          <option value="COMPUTER">컴퓨터</option>
+          <option value="ART">미술</option>
+          <option value="COOKING">요리</option>
+          <option value="MUSIC">음악</option>
+          <option value="ETC">기타</option>
         </select>
         <div class="invalid-feedback">카테고리를 선택해주세요</div>
       </div>

@@ -181,42 +181,43 @@ export default {
   <div class="mesgs">
     <div class="btn-group dropstart" style="float: right">
       <button
-        type="button"
-        class="btn btn-secondary dropdown-toggle"
-        data-bs-toggle="dropdown"
-        aria-expanded="false"
+          type="button"
+          class="btn btn-secondary dropdown-toggle"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
       >
         <i class="bi bi-people-fill"></i> {{ people.length }}
       </button>
       <ul class="dropdown-menu">
         <li v-for="(person, index) in people" :key="index">
           <a class="dropdown-item"
-            ><i class="bi bi-person-circle">{{}}</i> {{ person }}</a
+          ><i class="bi bi-person-circle">{{}}</i> {{ person }}</a
           >
         </li>
       </ul>
     </div>
     <div class="msg_history">
       <div
-        v-for="(message, index) in messages"
-        :key="index"
-        :class="
+          v-for="(message, index) in messages"
+          :key="index"
+          :class="
           message.senderEmail === this.$store.state.loginedEmail
             ? 'outgoing_msg'
             : 'incoming_msg'
         "
       >
         <div
-          v-if="message.senderEmail !== this.$store.state.loginedEmail"
-          class="incoming_msg_img"
+            v-if="message.senderEmail !== this.$store.state.loginedEmail"
+            class="incoming_msg_img"
         >
           <img
-            src="https://ptetutorials.com/images/user-profile.png"
-            alt="user"
-          />{{ message.senderName }}
+              src="https://ptetutorials.com/images/user-profile.png"
+              alt="user"
+          />
         </div>
+        {{ message.senderName }}
         <div
-          :class="
+            :class="
             message.senderEmail === this.$store.state.loginedEmail
               ? 'sent_msg'
               : 'received_withd_msg'
@@ -232,10 +233,10 @@ export default {
     <div class="type_msg">
       <div class="input_msg_write">
         <input
-          type="text"
-          v-model="content"
-          class="write_msg"
-          placeholder="Type a message"
+            type="text"
+            v-model="content"
+            class="write_msg"
+            placeholder="Type a message"
         />
         <button @click="sendMessage" class="msg_send_btn" type="button">
           <i class="fa fa-paper-plane-o" aria-hidden="true"></i>

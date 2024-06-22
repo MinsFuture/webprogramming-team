@@ -58,8 +58,8 @@ export default {
   <h2 class="center-content" style="color: #8b572a">
     내가 신청한 프로그램들
   </h2>
-  <div class="container">
-    <div class="content">
+  <div class="content">
+    <div class="container">
       <div
           @click="routingProgramDetail(program.programId)"
           class="card"
