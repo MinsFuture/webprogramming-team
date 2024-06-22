@@ -394,7 +394,9 @@ export default {
       this.$router.push(`/board/update/${this.$route.params.id}`);
     },
     routingMemberPrograms() {
-      this.$router.push(`/programs/${this.programIdReadResponse.memberEmail}`);
+      this.$router.push(
+        `/board/programs/${this.programIdReadResponse.memberEmail}`
+      );
     },
     deleteProgram() {
       let id = this.$route.params.id;
@@ -425,12 +427,12 @@ export default {
         })
         .then((response) => {
           this.nowProgramRecruit = response.data.response;
-          alert("프로그램을 신청하셨습니다");
+          alert("프로그램을 신청하셨습니다.");
           this.$router.go(0);
         })
         .catch((error) => {
           console.log("프로그램 신청 에러 : " + error);
-          alert("이미 신청 한 프로그램입니다");
+          alert("이미 신청 한 프로그램이거나 신청할 권한이 없습니다.");
         });
     },
     routingAllChatComp() {

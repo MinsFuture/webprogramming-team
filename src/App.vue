@@ -29,6 +29,21 @@
             >
           </li>
           <li class="nav-item">
+            <div class="nav-link" style="color: #8b572a">|</div>
+          </li>
+          <li class="nav-item">
+            <router-link
+              to="/nearby"
+              class="nav-link"
+              active-class="active"
+              style="color: #8b572a"
+              >내 주위 프로그램 찾기</router-link
+            >
+          </li>
+          <li class="nav-item">
+            <div class="nav-link" style="color: #8b572a">|</div>
+          </li>
+          <li class="nav-item">
             <router-link
               to="/chart"
               class="nav-link"
@@ -37,19 +52,15 @@
               >전국 프로그램 현황</router-link
             >
           </li>
-          <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/nearby">주위 프로그램 찾기</a>
-          </li>
-
         </ul>
 
         <div class="icon-group ms-auto">
-          <i
-            class="bi bi-chat-fill"
-            @click="routingProgramPrivateChatComp"
-            style="color: rgba(139, 87, 42, 0.9)"
-          ></i>
           <div v-if="this.$store.state.isLogin" class="dropdown-center">
+            <i
+              class="bi bi-chat-fill"
+              @click="routingProgramPrivateChatComp"
+              style="color: rgba(139, 87, 42, 0.9)"
+            ></i>
             <i
               class="bi bi-person-circle dropdown-toggle"
               data-bs-toggle="dropdown"
@@ -96,7 +107,8 @@
           v-if="!this.$store.state.isLogin"
           @click="routingLoginComp"
           type="button"
-          class="btn btn-light"
+          class="btn"
+          style="background-color: rgba(139, 87, 42, 0.7); color: white"
         >
           로그인
         </button>
@@ -104,7 +116,8 @@
           v-if="!this.$store.state.isLogin"
           @click="routingCreateMemberComp"
           type="button"
-          class="btn btn-light"
+          class="btn"
+          style="background-color: rgba(139, 87, 42, 0.7); color: white"
         >
           회원가입
         </button>
@@ -123,10 +136,7 @@
 
   <div v-if="this.$route.path === '/'">
     <div class="center-content">
-      <nav
-        class="navbar navbar-expand-lg bg-body-tertiary"
-        style="background-color: white"
-      >
+      <nav class="navbar" style="background-color: white">
         <div class="container-fluid" style="background-color: white">
           <form
             class="d-flex"
@@ -143,7 +153,7 @@
               style="width: 500px; border-color: #8b572a"
             />
             <button
-              class="btn"
+              class="btn2"
               type="submit"
               style="width: 100px; color: #8b572a"
             >
@@ -335,7 +345,6 @@ export default {
 
 .navbar-nav .nav-link.active {
   font-weight: bold;
-
   color: rgb(83, 52, 26);
 }
 .nav-link.active {
@@ -370,7 +379,17 @@ export default {
 }
 
 .btn {
-  margin-left: 1rem;
+  margin-left: 5px;
+}
+.btn2 {
+  background-color: rgba(255, 220, 159, 0.1);
+  border-color: rgba(139, 87, 42, 1);
+  border-radius: 6px;
+  border-width: 1px;
+}
+.btn2:hover {
+  background-color: rgba(255, 220, 159, 0.3);
+  border-color: rgba(139, 87, 42, 1);
 }
 
 .text-primary {

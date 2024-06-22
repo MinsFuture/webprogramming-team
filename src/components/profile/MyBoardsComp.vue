@@ -47,7 +47,7 @@ export default {
 </script>
 
 <template>
-  <h1 class="center-content">내가 개최한 프로그램들</h1>
+  <h2 class="center-content" style="color: #8b572a">내가 개최한 프로그램들</h2>
   <div class="content">
     <div class="container">
       <div
